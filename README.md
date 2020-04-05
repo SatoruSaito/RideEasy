@@ -7,7 +7,14 @@ Clone the project, change into the directory and install the dependencies.
 npm install
 ```
 
-Create a `.env` file for environment variables in your server.
+Create a `.env` file at root directory  for environment variables in your server.
+
+```
+PORT= 5000
+SERVER_PORT = 3000
+DEV_ENV = "dev"
+PROD_ENV = "prod"
+```
 
 You can start the server on its own with the command:
 
