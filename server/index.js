@@ -21,10 +21,11 @@ app.get("/", (req, res) => {
 require("./routes/admin.routes.js")(app);*/
 
 require("./routes/reservation.routes.js")(app);
+require("./routes/vehicle.routes.js")(app);
 
 
 app.listen(server, () => {
-  console.log("Express Server is running on port 3000.");
+  console.log("Express Server is running on port " + server);
 });
 
 
