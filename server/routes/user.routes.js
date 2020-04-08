@@ -1,4 +1,4 @@
-module.exports = app => {
+/*module.exports = app => {
     const users = require("../controllers/user.controller.js");
   
     //all the routes related to user to be updated in this file
@@ -13,4 +13,4 @@ module.exports = app => {
     //cancel reservation
   
     
-  };
+  };*/
