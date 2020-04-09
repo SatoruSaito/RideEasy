@@ -1,5 +1,5 @@
-const vehicle = require("../models/vehicle.model.js");
-const uuidv4 = require('uuid/v4');
+const Vehicle = require("../models/vehicle.model.js");
+const { uuid } = require('uuidv4');
 //all vehicle apis will be updated in this file
 
 // Create and Save a new Vehicle
@@ -13,8 +13,8 @@ exports.create = (req, res) => {
     }
 
     // Create a Vehicle
-  const Vehicle = new vehicle({
-    uuid: uuidv4(),
+  const vehicle = new Vehicle({
+    uuid: uuid(),
     vehicle_type_uuid: req.body.vehicle_type_uuid,
     model: req.body.model,
     make: req.body.make,
@@ -25,13 +25,13 @@ exports.create = (req, res) => {
     is_reserved: req.body.is_reserved,
     vehicle_condition : req.body.vehicle_condition,
     next_available_time : req.body.next_available_time,
-    location_uuid : req.body.location_uuid,
-    created_at : req.body.created_at,
-    updated_at : req.body.updated_at
+    location_uuid : req.body.location_uuid
+    // created_at : req.body.created_at,
+    // updated_at : req.body.updated_at
   });
 
   // Save Vehicle in the database
-  vehicle.create(Vehicle, (err, data) => {
+  Vehicle.create(vehicle, (err, data) => {
     if (err)
       res.status(500).send({
         message:
@@ -44,7 +44,7 @@ exports.create = (req, res) => {
 // Retrieve all unreserved Vehicles from the database which satisfy the search criteria
 
 exports.findAll = (req, res) => {
-    vehicle.getAll((err, data) => {
+    Vehicle.getAll((err, data) => {
       if (err)
         res.status(500).send({
           message:
@@ -53,6 +53,22 @@ exports.findAll = (req, res) => {
       else res.send(data);
     });
   };
+
+exports.findByUuid = (req, res) => {
+  Vehicle.getByUuid(req.params.vehicleUuid, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Vehicle with uuid ${req.params.vehicleUuid}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Vehicle with uuid " + req.params.vehicleUuid
+        });
+      }
+    } else res.send(data);
+  });
+};
 
 
 
