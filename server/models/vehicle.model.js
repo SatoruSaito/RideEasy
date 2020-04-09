@@ -16,16 +16,16 @@ const Vehicle = function(vehicle) {
     this.location_uuid = vehicle.location_uuid;
   };
 
-  Vehicle.create = (newvehicle, result) => {
-    sql.query("INSERT INTO vehicle SET ?", newvehicle, (err, res) => {
+  Vehicle.create = (newVehicle, result) => {
+    sql.query("INSERT INTO vehicle SET ?", newVehicle, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
         return;
       }
   
-      console.log("Created vehicle: ", { id: res.insertId, ...newvehicle });
-      result(null, { id: res.insertId, ...newvehicle });
+      console.log("Created vehicle: ", { id: res.insertId, ...newVehicle });
+      result(null, { id: res.insertId, ...newVehicle });
     });
   };
   

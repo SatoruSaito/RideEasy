@@ -12,8 +12,8 @@ exports.create = (req, res) => {
       });
     }
 
-    // Create a Vehicle
-  const vehicle = new Vehicle({
+// Create a Vehicle
+const vehicle = new Vehicle({
     uuid: uuid(),
     vehicle_type_uuid: req.body.vehicle_type_uuid,
     model: req.body.model,
@@ -26,8 +26,6 @@ exports.create = (req, res) => {
     vehicle_condition : req.body.vehicle_condition,
     next_available_time : req.body.next_available_time,
     location_uuid : req.body.location_uuid
-    // created_at : req.body.created_at,
-    // updated_at : req.body.updated_at
   });
 
   // Save Vehicle in the database
@@ -44,11 +42,11 @@ exports.create = (req, res) => {
 // Retrieve all unreserved Vehicles from the database which satisfy the search criteria
 
 exports.findAll = (req, res) => {
-    Vehicle.getAll((err, data) => {
-      if (err)
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving vehicles."
+  Vehicle.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving vehicles."
         });
       else res.send(data);
     });

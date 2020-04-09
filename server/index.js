@@ -22,6 +22,7 @@ require("./routes/admin.routes.js")(app);*/
 
 require("./routes/reservation.routes.js")(app);
 require("./routes/vehicle.routes.js")(app);
+require("./routes/membership.routes.js")(app);
 
 
 app.listen(server, () => {
