@@ -1,7 +1,7 @@
 const sql = require("./db.js");
 
 // constructor
-const vehicle = function(vehicle) {
+const Vehicle = function(vehicle) {
     this.uuid = vehicle.uuid;
     this.vehicle_type_uuid = vehicle.vehicle_type_uuid;
     this.model = vehicle.model;
@@ -14,11 +14,9 @@ const vehicle = function(vehicle) {
     this.vehicle_condition = vehicle.vehicle_condition;
     this.next_available_time = vehicle.next_available_time;
     this.location_uuid = vehicle.location_uuid;
-    this.created_at = vehicle.created_at;
-    this.updated_at = vehicle.updated_at;
   };
 
-  vehicle.create = (newvehicle, result) => {
+  Vehicle.create = (newvehicle, result) => {
     sql.query("INSERT INTO vehicle SET ?", newvehicle, (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -26,12 +24,12 @@ const vehicle = function(vehicle) {
         return;
       }
   
-      console.log("created vehicle: ", { id: res.insertId, ...newvehicle });
+      console.log("Created vehicle: ", { id: res.insertId, ...newvehicle });
       result(null, { id: res.insertId, ...newvehicle });
     });
   };
   
-  vehicle.getAll = result => {
+  Vehicle.getAll = result => {
       sql.query("SELECT vehicle.uuid, vehicle.model, vehicle.make, vehicle.is_reserved, vehicle_type.type FROM vehicle INNER JOIN vehicle_type ON vehicle.vehicle_type_uuid = vehicle_type.uuid WHERE vehicle.is_reserved = false", (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -44,5 +42,23 @@ const vehicle = function(vehicle) {
       });
     };
 
+  Vehicle.getByUuid = (vehicleUuid, result) => {
+    sql.query(`SELECT * FROM vehicle WHERE uuid = \'${escape(vehicleUuid)}\'`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+
+        if (res.length) {
+            console.log("found vehicle: ", res[0]);
+            result(null, res[0]);
+            return;
+        }
+        // not found vehicle with the uuid
+        result({kind: "not_found"}, null);
+    });
+};
+
   
-module.exports = vehicle;
+module.exports = Vehicle;
