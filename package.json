@@ -1,12 +1,14 @@
 {
-  "name": "react-express-starter",
+  "name": "car-rental-service",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "dotenv": "^8.2.0",
+    "hookrouter": "^1.2.3",
     "mysql": "^2.18.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-hook-form": "^5.3.1",
     "react-scripts": "^3.4.0"
   },
   "scripts": {
@@ -34,19 +36,6 @@
     "node-env-run": "^3.0.2",
     "nodemon": "^1.19.4",
     "npm-run-all": "^4.1.5",
-    "pino-colada": "^1.6.1",
-    "uuidv4": "^6.0.2"
-  },
-  "description": "Clone the project, change into the directory and install the dependencies.",
-  "main": "config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dhwani91/car-rental-service.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dhwani91/car-rental-service/issues"
-  },
-  "homepage": "https://github.com/dhwani91/car-rental-service#readme"
+    "pino-colada": "^1.6.1"
+  }
 }
