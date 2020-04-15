@@ -35,3 +35,14 @@ exports.create = (req, res) => {
     
   });
 };
+//Get all the details of vehicle_price_range table
+exports.findAll = (req, res) => {
+  pricerange.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving vehicles."
+        });
+      else res.send(data);
+    });
+  };

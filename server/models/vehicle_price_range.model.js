@@ -26,4 +26,18 @@ pricerange.create = (newPricerange, result) => {
     });
 };
 
+//Fetching all the details from vehicle price_range table
+pricerange.getAll = result => {
+  sql.query("SELECT * from vehicle_price_range", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log("Vehicle_price_range: ", res);
+    result(null, res);
+  });
+};
+
 module.exports = pricerange;
