@@ -6,4 +6,7 @@ module.exports = app => {
 
     // Get all locations
     app.get("/locations", location.findAll);
+
+    // Retrieve a single location with locationUuid
+    app.get("/locations/:locationUuid", location.findByUuid);
 };

@@ -37,5 +37,23 @@ Location.getAll = result => {
     });
 };
 
+Location.getByUuid = (locationUuid, result) => {
+    sql.query(`SELECT * FROM location WHERE uuid = \'${escape(locationUuid)}\'`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+
+        if (res.length) {
+            console.log("found location: ", res[0]);
+            result(null, res[0]);
+            return;
+        }
+        // member with the uuid not found
+        result({kind: "not_found"}, null);
+    });
+};
+
 
 module.exports = Location;
