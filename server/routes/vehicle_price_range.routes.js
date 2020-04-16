@@ -7,5 +7,8 @@ module.exports = app => {
 
     //route for fetching all the recprds from the vehicle_price_range table
     app.get("/vehiclepricerange", Pricerange.findAll);
+    
+    //route for updating the records based on uuid
+    app.put("/vehiclepricerange/:uuid", Pricerange.update);
 
 };

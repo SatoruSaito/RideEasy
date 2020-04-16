@@ -46,3 +46,32 @@ exports.findAll = (req, res) => {
       else res.send(data);
     });
   };
+  //update logic on vehicle_price_range table
+  exports.update = (req, res) => {
+    // Validate Request
+    if (!req.body) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+    }
+  
+    console.log(req.body);
+    //Update vehicle price_range fields such as min_hours,max_hours ,price ,late_fee based on uuid
+    pricerange.updateById(
+      req.params.uuid,
+      new pricerange(req.body),
+      (err, data) => {
+        if (err) {
+          if (err.kind === "not_found") {
+            res.status(404).send({
+              message: `Not found records with id ${req.params.uuid}.`
+            });
+          } else {
+            res.status(500).send({
+              message: "Error updating table with uuid " + req.params.uuid
+            });
+          }
+        } else res.send(data);
+      }
+    );
+  };
