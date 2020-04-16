@@ -20,6 +20,7 @@ require("./routes/reservation.routes.js")(app);
 require("./routes/vehicle.routes.js")(app);
 require("./routes/membership.routes.js")(app);
 require("./routes/vehicle_price_range.routes.js")(app);
+require("./routes/location.routes.js")(app);
 
 
 app.listen(server, () => {
