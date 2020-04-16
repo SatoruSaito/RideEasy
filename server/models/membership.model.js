@@ -53,5 +53,17 @@ const Membership = function(membership) {
     });
 };
 
+Membership.patchByUuId = (membershipUuid, result) => {
+  sql.query(`UPDATE rental_car_system.membership SET status = 'INACTIVE' WHERE uuid = \'${escape(membershipUuid)}\'`, (err, res) => {
+      if (err) {
+          console.log("error: ", err);
+          result(err, null);
+          return;
+      } else 
+        console.log("membership status updated", res);
+        result(null,res);
+  });
+};
+
   
 module.exports = Membership;

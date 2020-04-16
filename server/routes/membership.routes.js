@@ -10,4 +10,7 @@ module.exports = app => {
 // Retrieve a specific member with membershipId
   app.get("/membership/:membershipUuid", membership.findByUuid);
 
+//update membership status when admin deletes the membership
+  app.patch("/membership/:membershipUuid", membership.updateOne);
+
 };
