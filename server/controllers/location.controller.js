@@ -31,4 +31,15 @@ exports.create = (req, res) => {
     });
 };
 
+// Retrieve all locations from the database
+exports.findAll = (req, res) => {
+    Location.getAll((err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Error occurred while retrieving locations."
+            });
+        else res.send(data);
+    });
+};
 

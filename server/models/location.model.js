@@ -25,5 +25,17 @@ Location.create = (newLocation, result) => {
     });
 };
 
+Location.getAll = result => {
+    sql.query("SELECT * FROM location", (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log("locations: ", res);
+        result(null, res);
+    });
+};
+
 
 module.exports = Location;
