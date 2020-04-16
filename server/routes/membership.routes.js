@@ -8,6 +8,6 @@ module.exports = app => {
   app.get("/membership", membership.findAll);
 
 // Retrieve a specific member with membershipId
-app.get("/membership/:membershipUuid", membership.findByUuid);
+  app.get("/membership/:membershipUuid", membership.findByUuid);
 
 };
