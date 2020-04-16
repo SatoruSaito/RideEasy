@@ -1,7 +1,6 @@
+//all membership apis will be updated in this file
 const Membership = require("../models/membership.model.js");
 const { uuid } = require('uuidv4');
-
-//all membership apis will be updated in this file
 
 // Create and Save a new Membership
 exports.create = (req, res) => {
@@ -27,24 +26,26 @@ exports.create = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the membership."
+          err.message || "Error occurred while creating the membership."
       });
     else res.send(data);
   });
 };
 
-// Retrieve all unreserved Vehicles from the database which satisfy the search criteria
+// Retrieve all members from the database
 
 exports.findAll = (req, res) => {
     Membership.getAll((err, data) => {
       if (err)
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving membership."
+            err.message || "Error occurred while retrieving membership."
         });
       else res.send(data);
     });
   };
+
+// Retrieve a specific member by uuid
 
 exports.findByUuid = (req, res) => {
   Membership.getByUuid(req.params.membershipUuid, (err, data) => {
@@ -62,6 +63,22 @@ exports.findByUuid = (req, res) => {
   });
 };
 
+//update membership status when admin deletes the membership
 
+exports.updateOne = (req, res) => {
+  Membership.patchByUuId(req.params.membershipUuid, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `membership with the uuid ${req.params.membershipUuid} not found.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving membership with uuid " + req.params.membershipUuid
+        });
+      }
+    } else res.send({message: `membership status for ${req.params.membershipUuid} updated successfully.`});
+    });
+};
 
 

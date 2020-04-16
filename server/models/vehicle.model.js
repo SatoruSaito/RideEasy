@@ -29,18 +29,37 @@ const Vehicle = function(vehicle) {
     });
   };
   
-  Vehicle.getAll = result => {
-      sql.query("SELECT vehicle.uuid, vehicle.model, vehicle.make, vehicle.is_reserved, vehicle_type.type FROM vehicle INNER JOIN vehicle_type ON vehicle.vehicle_type_uuid = vehicle_type.uuid WHERE vehicle.is_reserved = false", (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(null, err);
-          return;
-        }
-    
-        console.log("vehicles: ", res);
+  Vehicle.getAll = (vehicleType,city,startTime, result) => {
+    sql.query(`SELECT T.uuid, L.uuid, V.uuid, V.vehicle_type_uuid, V.model, V.make, V.year, V.registration_number, V.current_mileage, V.last_serviced_date, V.is_reserved, V.vehicle_condition, V.next_available_time, V.location_uuid, T.type, L.name, L.address, L.city, L.state, L.zip_code, L.capacity, L.number_of_vehicles FROM vehicle V LEFT OUTER JOIN vehicle_type T ON V.vehicle_type_uuid = T.uuid LEFT OUTER JOIN location L ON V.location_uuid = L.uuid WHERE V.is_reserved = false AND T.type = \'${escape(vehicleType)}\' AND L.city = \'${escape(city)}\' AND V.next_available_time >= \'${escape(startTime)}\'`, (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      } 
+
+      if(res.length){
+        console.log("number of matching vehicles at given location: ", res.length);
         result(null, res);
-      });
-    };
+        return;
+
+      } else {
+
+        sql.query(`SELECT T.uuid, L.uuid, V.uuid, V.vehicle_type_uuid, V.model, V.make, V.year, V.registration_number, V.current_mileage, V.last_serviced_date, V.is_reserved, V.vehicle_condition, V.next_available_time, V.location_uuid, T.type, L.name, L.address, L.city, L.state, L.zip_code, L.capacity, L.number_of_vehicles FROM vehicle V LEFT OUTER JOIN vehicle_type T ON V.vehicle_type_uuid = T.uuid LEFT OUTER JOIN location L ON V.location_uuid = L.uuid WHERE V.is_reserved = false AND T.type = \'${escape(vehicleType)}\' AND V.next_available_time >= \'${escape(startTime)}\'`, (err, res) => {
+
+          if(err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+          }
+
+          console.log("Number of vehicles at other locations: ", res.length);
+          result(null, res);
+          return;
+
+        });
+      }
+  });
+};
 
   Vehicle.getByUuid = (vehicleUuid, result) => {
     sql.query(`SELECT * FROM vehicle WHERE uuid = \'${escape(vehicleUuid)}\'`, (err, res) => {

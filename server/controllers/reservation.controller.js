@@ -18,8 +18,7 @@ exports.create = (req, res) => {
     user_uuid:req.body.user_uuid,
     start_date:req.body.start_date,
     end_date:req.body.end_date,
-    created_at:req.body.created_at,
-    updated_at:req.body.updated_at
+    
     
   });
 

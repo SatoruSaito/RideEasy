@@ -42,15 +42,18 @@ const vehicle = new Vehicle({
 // Retrieve all unreserved Vehicles from the database which satisfy the search criteria
 
 exports.findAll = (req, res) => {
-  Vehicle.getAll((err, data) => {
+  Vehicle.getAll(req.params.vehicleType, req.params.city, req.params.startTime, (err, data) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving vehicles."
-        });
-      else res.send(data);
-    });
-  };
+          err.message || "Error occurred while retrieving vehicles."
+        }); 
+      else {
+          console.log(data);
+          res.send(data);
+      }
+  });
+};
 
 exports.findByUuid = (req, res) => {
   Vehicle.getByUuid(req.params.vehicleUuid, (err, data) => {
