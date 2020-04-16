@@ -62,6 +62,25 @@ pricerange.updateById = (uuid, pricerange, result) => {
     }
   );
 };
+//delete records of vehicle_price_range with uuid
+pricerange.remove = (uuid, result) => {
+  sql.query("DELETE FROM vehicle_price_range WHERE uuid = ?", uuid, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      // not found records with the uuid
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("deleted record with uuid: ", uuid);
+    result(null, res);
+  });
+};
 
 
 module.exports = pricerange;

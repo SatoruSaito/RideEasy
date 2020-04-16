@@ -75,3 +75,20 @@ exports.findAll = (req, res) => {
       }
     );
   };
+
+  // Delete a record with the specified uuid in the request for vehicle_price_range table
+exports.delete = (req, res) => {
+  pricerange.remove(req.params.uuid, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found record with id ${req.params.uuid}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Could not delete record with id " + req.params.uuid
+        });
+      }
+    } else res.send({ message: `record was deleted successfully!` });
+  });
+};

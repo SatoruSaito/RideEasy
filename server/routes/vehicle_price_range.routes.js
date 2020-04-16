@@ -5,10 +5,13 @@ module.exports = app => {
     app.post("/vehiclepricerange", Pricerange.create);
     console.log("here in routes")
 
-    //route for fetching all the recprds from the vehicle_price_range table
+    //route for fetching all the records from the vehicle_price_range table
     app.get("/vehiclepricerange", Pricerange.findAll);
     
     //route for updating the records based on uuid
     app.put("/vehiclepricerange/:uuid", Pricerange.update);
+
+      // Delete record with uuid
+  app.delete("/vehiclepricerange/:uuid", Pricerange.delete);
 
 };
