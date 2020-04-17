@@ -45,6 +45,7 @@ exports.findAll = (req, res) => {
     });
   };
 
+
 // Retrieve a specific member by membership uuid
 
 exports.findByUuid = (req, res) => {
@@ -57,25 +58,6 @@ exports.findByUuid = (req, res) => {
       } else {
         res.status(500).send({
           message: "Error retrieving membership with uuid " + req.params.membershipUuid
-        });
-      }
-    } else res.send(data);
-  });
-};
-
-
-// Retrieve membership status of a user by User UUID
-
-exports.findByUserUuid = (req, res) => {
-  Membership.getByUserUuid(req.params.userUuid, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `membership with the user uuid ${req.params.userUuid} not found.`
-        });
-      } else {
-        res.status(500).send({
-          message: "Error retrieving membership with uuid " + req.params.userUuid
         });
       }
     } else res.send(data);

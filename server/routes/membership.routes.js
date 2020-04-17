@@ -1,19 +1,16 @@
 module.exports = app => {
     const membership = require("../controllers/membership.controller.js");
 
-// Create a new membership
+// Creating a new membership record done from cognito
   app.post("/membership", membership.create);
 
-// Get all members
+// For the admin to see all members
   app.get("/membership", membership.findAll);
 
-// Retrieve a specific member with membershipId
+// For the admin to retrieve a specific member with membershipId
   app.get("/membership/:membershipUuid", membership.findByUuid);
 
-// Retrieve membership status of a user by User UUID
-  app.get("/membership/:userUuid", membership.findByUserUuid);
-
-//update membership status when admin deletes the membership
+//for the admin to terminate membership
   app.patch("/membership/:membershipUuid", membership.updateOne);
 
 };

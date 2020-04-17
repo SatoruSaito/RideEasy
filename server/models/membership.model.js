@@ -22,6 +22,7 @@ const Membership = function(membership) {
     });
   };
   
+  
   Membership.getAll = result => {
       sql.query("SELECT * FROM membership", (err, res) => {
         if (err) {
@@ -34,6 +35,7 @@ const Membership = function(membership) {
         result(null, res);
       });
     };
+
 
   Membership.getByUuid = (membershipUuid, result) => {
     sql.query(`SELECT * FROM membership WHERE uuid = \'${escape(membershipUuid)}\'`, (err, res) => {
@@ -51,25 +53,6 @@ const Membership = function(membership) {
         // member with the uuid not found
         result({kind: "not_found"}, null);
     });
-};
-
-
-Membership.getByUuid = (userUuid, result) => {
-  sql.query(`SELECT * FROM membership WHERE user_uuid = \'${escape(userUuid)}\'`, (err, res) => {
-      if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
-      }
-
-      if (res.length) {
-          console.log("found membership for the given user: ", res[0]);
-          result(null, res[0]);
-          return;
-      }
-      // member with the uuid not found
-      result({kind: "not_found"}, null);
-  });
 };
 
 
