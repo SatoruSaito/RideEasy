@@ -22,7 +22,7 @@ const Membership = function(membership) {
     });
   };
   
-  
+
   Membership.getAll = result => {
       sql.query("SELECT * FROM membership", (err, res) => {
         if (err) {
