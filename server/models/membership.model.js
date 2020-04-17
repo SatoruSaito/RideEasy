@@ -22,6 +22,7 @@ const Membership = function(membership) {
     });
   };
   
+  //get all members from membership table
 
   Membership.getAll = result => {
       sql.query("SELECT * FROM membership", (err, res) => {
@@ -36,6 +37,8 @@ const Membership = function(membership) {
       });
     };
 
+
+  // get specific member by membership UUID
 
   Membership.getByUuid = (membershipUuid, result) => {
     sql.query(`SELECT * FROM membership WHERE uuid = \'${escape(membershipUuid)}\'`, (err, res) => {
@@ -55,7 +58,8 @@ const Membership = function(membership) {
     });
 };
 
-
+//Update status of membership when admijn deletes a member
+ 
 Membership.patchByUuId = (membershipUuid, result) => {
   sql.query(`UPDATE rental_car_system.membership SET status = 'INACTIVE' WHERE uuid = \'${escape(membershipUuid)}\'`, (err, res) => {
       if (err) {

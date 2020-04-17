@@ -10,7 +10,7 @@ module.exports = app => {
 // For the admin to retrieve a specific member with membershipId
   app.get("/membership/:membershipUuid", membership.findByUuid);
 
-//for the admin to terminate membership
+// For the admin to terminate membership
   app.patch("/membership/:membershipUuid", membership.updateOne);
 
 };
