@@ -13,7 +13,7 @@ import {
   MDBNavItem,
   MDBCollapse,
   MDBNavbarNav
-} from "mdbreact"
+} from "mdbreact";
 
 import { getZipcode, getState, getCity } from "../../utils/common"
 import appConfig from "../../config/app-config"
@@ -47,6 +47,9 @@ const AddRentalLocation = () => {
     const options = {
       method: "POST",
       body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
     const response = fetch(APIS.addLocation, options).then(res => console.log(res))
   }
@@ -128,7 +131,7 @@ const AddRentalLocation = () => {
               <div class="form-group row">
                 <label class="col-sm-5">No Of Vehicles</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" placeholder="No Of Vehicles" ref={register} name="no_of_vehicles" />
+                  <input type="text" class="form-control" placeholder="No Of Vehicles" ref={register} name="number_of_vehicles" />
                 </div>
               </div>
               <div className="text-center py-4 mt- o3">

@@ -15,40 +15,43 @@ import {
   MDBNavbarNav
 } from "mdbreact"
 
-import { getZipcode } from "../../utils/common"
+import { getZipcode, getState, getCity } from "../../utils/common"
 import appConfig from "../../config/app-config"
 import { APIS } from "../../requests/api-helper.js"
 import logo from "../../images/rideeasy.png"
 
 const AddRentalLocation = () => {
-  const [city, setCity] = useState("")
-  const [zipCode, setZipcode] = useState("")
-  const [state, setStates] = useState("")
+  const [address, setAddress] = useState();
 
   const handleChangeAddress = (place) => {
-    console.log("place", place)
-
-    // const pickupZipcode = getZipcode(place.address_components);
-    // this.setState({ pickupZipcode: pickupZipcode, pickupAddress:place.address_components[0].long_name });
+    console.log(place);
+    setAddress(place)
   }
   const { register, handleSubmit, watch, errors } = useForm()
-  const onSubmit = data => { console.log("data",data) }
+  const onSubmit = ({capacity,name,number_of_vehicles}) => {
+    console.log("data",address)
+    console.log("address", address && getZipcode(address.address_components))
+    console.log("state",address && getState(address.address_components))
 
-  const handleSubmitLocation = () => {
-    // const payload = {
-    //   name,
-    //   address,
-    //   city,
-    //   zip_code,
-    //   capacity,
-    //   number_of_vehicles,
-    // }
+    const payload = {
+      name,
+      capacity,
+      number_of_vehicles,
+      address: address && address.formatted_address,
+      zip_code: address && getZipcode(address.address_components),
+      state: address && getState(address.address_components),
+      city: address && getCity(address.address_components)
+    }
+
 
     const options = {
       method: "POST",
-      body: JSON.stringify(""),
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
-    const response = fetch(APIS.getLocation, options)
+    const response = fetch(APIS.addLocation, options).then(res => console.log(res))
   }
 
   return (
@@ -80,12 +83,12 @@ const AddRentalLocation = () => {
   </MDBBtn>
   </MDBNavItem>
   <MDBNavItem>
-  <MDBBtn color="indigo" href={"/admin/addVehicle"} mdbWavesEffect>
+  <MDBBtn color="indigo" href={"/admin/addVehicle"} mdbWavesEffect active>
   Add Vehicle
   </MDBBtn>
   </MDBNavItem>
   <MDBNavItem>
-  <MDBBtn color="indigo" href={"/admin/addLocation"} mdbWavesEffect active>
+  <MDBBtn color="indigo" href={"/admin/addLocation"} mdbWavesEffect>
   Add location
   </MDBBtn>
   </MDBNavItem>
@@ -97,31 +100,25 @@ const AddRentalLocation = () => {
     <MDBCard className="col-md-7">
     <MDBCardBody>
     <form onSubmit={handleSubmit(onSubmit)} >
-    <p className="h4 text-center py-4 grey-text">Add a new Location</p>
-  <div class="form-group row">
-    <label class="col-sm-5">Location</label>
+    <p className="h4 text-center py-4 grey-text">Add New Vehicle</p>
+    <div class="form-group row">
+    <label class="col-sm-5">Year</label>
     <div class="col-sm-7">
-    <Autocomplete
-  className="form-control form-inputs"
-  name="address"
-  placeholder="New Rental Location"
-  onPlaceSelected={(place) => handleChangeAddress(place)}
-  types={["address"]}
-    />
+    <input type="text" class="form-control" placeholder="year" ref={register} name ="year"/>
     </div>
     </div>
 
     <div class="form-group row">
-    <label class="col-sm-5">Capacity</label>
-    <div class="col-sm-7">
-    <input type="text" class="form-control" placeholder="Capacity" ref={register} name =""/>
-    </div>
-    </div>
-
-    <div class="form-group row">
-    <label class="col-sm-5">No Of Vehicles</label>
+    <label class="col-sm-5">Make</label>
   <div class="col-sm-7">
-    <input type="text" class="form-control" placeholder="No Of Vehicles" ref={register} />
+    <input type="text" class="form-control" placeholder="Make" ref={register}  name="make"/>
+    </div>
+    </div>
+
+    <div class="form-group row">
+    <label class="col-sm-5">Model</label>
+  <div class="col-sm-7">
+    <input type="text" class="form-control" placeholder="Make" ref={register}  name="model"/>
     </div>
     </div>
     <div className="text-center py-4 mt- o3">
