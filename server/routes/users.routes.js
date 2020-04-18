@@ -8,6 +8,9 @@ module.exports = app => {
     app.get("/users/:userUuid", user.findByUuid);
 
 // Retrieve all membership details of a user by membership UUID
-    app.get("/users/:userUuid/membership", user.findMembershipByUserUuid);    
+    app.get("/users/:userUuid/membership", user.findMembershipByUserUuid);  
+    
+//Retrieve reservation details by user_uuid 
+    app.get("/users/:userUuid/reservations", user.findReservationByUserUuid);
 
 };

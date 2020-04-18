@@ -1,5 +1,6 @@
 const sql = require("./db.js");
 
+
 // constructor
 const User = function(user) {
     this.uuid = user.uuid;
@@ -53,22 +54,44 @@ const User = function(user) {
 // Retrieve all membership details of a user by membership UUID
 
 User.getMembershipByUserUuid = (userUuid, result) => {
-    sql.query(`SELECT M.user_uuid, M.status, M.uuid, M.start_date, M.end_date FROM user U JOIN membership M ON U.uuid = M.user_uuid WHERE U.uuid = \'${escape(userUuid)}\'`, (err, res) => {
-        if (err) {
-            console.log("error: ", err);
-            result(err, null);
-            return;
-        }
+  sql.query(`SELECT M.user_uuid, M.status, M.uuid, M.start_date, M.end_date FROM user U JOIN membership M ON U.uuid = M.user_uuid WHERE U.uuid = \'${escape(userUuid)}\'`, (err, res) => {
+      if (err) {
+          console.log("error: ", err);
+          result(err, null);
+          return;
+      }
 
-        if (res.length) {
-            console.log("found membership details of given user: ", res[0]);
-            result(null, res[0]);
-            return;
-        }
-        // member with the uuid not found
-        result({kind: "not_found"}, null);
-    });
+      if (res.length) {
+          console.log("found membership details of given user: ", res[0]);
+          result(null, res[0]);
+          return;
+      }
+      // member with the uuid not found
+      result({kind: "not_found"}, null);
+  });
 };
+
+
+//Retrieve details of reservation with user uuid
+User.getReservationByUserUuid = (userUuid, result) => {
+  sql.query(`SELECT R.uuid, R.vehicle_uuid, R.user_uuid, R.start_date, R.end_date FROM user U JOIN reservation R ON U.uuid = R.user_uuid WHERE U.uuid = \'${escape(userUuid)}\'`, (err, res) => {
+      if (err) {
+          console.log("error: ", err);
+          result(err, null);
+          return;
+      }
+
+      if (res.length) {
+          console.log("found Reservation details of given user: ", res[0]);
+          result(null, res[0]);
+          return;
+      }
+      // Reservation with the uuid not found
+      result({kind: "not_found"}, null);
+  });
+};
+
+
 
 
 
