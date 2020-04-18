@@ -1,6 +1,6 @@
 import React, { Fragment } from "react"
 import { APIS } from "../requests/api-helper.js"
-import useFetch from "../hooks/hooks"
+// import useFetch from "../hooks/hooks"
 import {
   MDBBtn,
   MDBCard,
@@ -22,7 +22,7 @@ import "../css/vehicles.css"
 import logo from "../images/rideeasy.png"
 
 const Vehicles = () => {
-  const res = useFetch(APIS.vehicles, {})
+  // const res = useFetch(APIS.vehicles, {})
 
   const vehicles = [
     {
@@ -96,14 +96,14 @@ const Vehicles = () => {
       type: "truck",
     },
   ]
-  if (!res.response) {
-    return (
-      <Fragment>
-        <MDBIcon icon="spinner" spin size="3x" fixed />
-        <span className="sr-only">Loading...</span>
-      </Fragment>
-    )
-  }
+  // if (!res.response) {
+  //   return (
+  //     <Fragment>
+  //       <MDBIcon icon="spinner" spin size="3x" fixed />
+  //       <span className="sr-only">Loading...</span>
+  //     </Fragment>
+  //   )
+  // }
 
   return (
     <div>
@@ -128,8 +128,7 @@ const Vehicles = () => {
       </MDBNavbar>
       <MDBView>
         <ul class="vehicle-wrapper margin-top-50">
-          {res.response &&
-            vehicles.map((vehicle) => (
+          {vehicles.map((vehicle) => (
               <MDBCol style={{ maxWidth: "22rem", minWidth: "13em" }}>
                 <MDBCard class="padding-20">
                   <MDBBadge color="amber" class="badge">

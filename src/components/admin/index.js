@@ -57,7 +57,6 @@ const MembersList = () => {
   const data =
     res.response &&
     res.response.map((user) => {
-      console.log("status", user.status)
       let rows = {
         user_uuid: user.user_uuid,
         status: user.status,
@@ -65,7 +64,8 @@ const MembersList = () => {
         endDate: user.end_date,
       }
 
-      if (user.status !== "INACTIVE " || user.status !== "Inactive") {
+      if (user.status === "ACTIVE" || user.status === "active") {
+         console.log("user",user.status)
         rows = {
           ...rows,
           action: (
@@ -75,6 +75,7 @@ const MembersList = () => {
           ),
         }
       } else {
+         console.log("else",user.status)
         rows = {
           ...rows,
           action: (
