@@ -19,5 +19,16 @@ VehicleType.create = (newVehicleType, result) => {
     });
 };
 
+VehicleType.getAll = result => {
+    sql.query("SELECT * FROM vehicle_type", null,(err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log("vehicle types: ", res);
+        result(null, res);
+    });
+};
 
 module.exports = VehicleType;
