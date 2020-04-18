@@ -1,0 +1,28 @@
+const VehicleType = require("../models/vehicle_type.model.js");
+const { uuid } = require('uuidv4');
+
+// Add Vehicle Type
+exports.create = (req, res) => {
+    // Validate request
+    if (!req.body) {
+        res.status(400).send({
+            message: "VehicleType payload can not be empty!"
+        });
+    }
+
+    const vehicleType = new VehicleType({
+        uuid: uuid(),
+        type: req.body.type,
+    });
+
+    VehicleType.create(vehicleType, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Error occurred while adding the vehicle type."
+            });
+        else res.send(data);
+    });
+};
+
+
