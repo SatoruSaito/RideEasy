@@ -26,8 +26,31 @@ exports.create = (req, res) => {
   reservation.create(reserve, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || "Some error occurred while creating reservation.",
-      })
-    else res.send(data)
-  })
-}
+
+
+        message:
+          err.message || "Some error occurred while creating reservation."
+      });
+    else res.send(data);
+    
+  });
+};
+
+ //Cancel reservation with user uuid and also check that cancel reservation should be successful only when the 
+  //user tries to cancel reservation 1 hr prior to start time otherwise need to charge 1 hr price
+  exports.delete = (req, res) => {
+    reservation.removebyUuid(req.params.uuid, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found reservation records  with  uuid ${req.params.uuid}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Could not delete reservation with id " + req.params.uuid
+          });
+        }
+      } else res.send({ message: `reservation  was cancelled successfully!` });
+    });
+  };
+

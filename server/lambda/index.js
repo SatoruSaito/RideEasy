@@ -15,7 +15,7 @@ exports.handler = (event, context, callback) => {
         console.log("USER REGISTRATION EVENT: \n" + JSON.stringify(event));
         const userProperties = event.request.userAttributes;
         const newUser = {
-            uuid: uuid(),
+            uuid: userProperties.sub,
             first_name: userProperties.given_name,
             last_name: userProperties.family_name,
             user_name: event.userName,
@@ -25,7 +25,7 @@ exports.handler = (event, context, callback) => {
 
         const newMembership = {
             uuid: uuid(),
-            user_uuid: newUser.uuid,
+            user_uuid: userProperties.sub,
             status: 'INCOMPLETE'
         };
         // Use the connection
