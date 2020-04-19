@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4fe816e3-6cf3-4f86-9cfd-5d1820999997" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cmpe202-final.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/config/db.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/config/db.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/vehicle_type.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/vehicle_type.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/vehicle_type.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/vehicle_type.model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/vehicle_type.routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/vehicle_type.routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lambda/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/lambda/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,6 +88,21 @@
       <workItem from="1587108831837" duration="6934000" />
       <workItem from="1587145021130" duration="44093000" />
     </task>
+    <task id="LOCAL-00001" summary="Implement API to fetch all vehicle types">
+      <created>1587253794680</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1587253794680</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Update lambda to store user_name in membership table">
+      <created>1587263765487</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1587263765487</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -114,5 +122,10 @@
     <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
       <collection />
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implement API to fetch all vehicle types" />
+    <MESSAGE value="Update lambda to store user_name in membership table" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update lambda to store user_name in membership table" />
   </component>
 </project>
