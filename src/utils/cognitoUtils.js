@@ -36,7 +36,7 @@ const createCognitoUserPool = () =>
 
 // Get the URI of the hosted sign in screen
 const getCognitoSignInUri = () => {
-  const signinUri = `${appConfig.userPoolBaseUri}/login?response_type=code&client_id=${appConfig.clientId}&redirect_uri=${appConfig.callbackUri}`
+   const signinUri = `${appConfig.userPoolBaseUri}/login?response_type=token&client_id=${appConfig.clientId}&redirect_uri=${appConfig.callbackUri}`
   return signinUri
 }
 
