@@ -26,6 +26,7 @@ exports.handler = (event, context, callback) => {
         const newMembership = {
             uuid: uuid(),
             user_uuid: newUser.uuid,
+            user_name: newUser.user_name,
             status: 'INCOMPLETE'
         };
         // Use the connection
