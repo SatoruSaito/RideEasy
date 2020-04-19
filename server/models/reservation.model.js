@@ -1,15 +1,20 @@
 const sql = require("./db.js")
 
 // constructor
-const reservation = function (reservation) {
-  this.uuid = reservation.uuid
-  this.vehicle_uuid = reservation.vehicle_uuid
-  this.user_uuid = reservation.user_uuid
-  this.start_date = reservation.start_date
-  this.end_date = reservation.end_date
-}
+
+const reservation = function(reservation) {
+  this.uuid = reservation.uuid;
+  this.vehicle_uuid = reservation.vehicle_uuid;
+  this.user_uuid = reservation.user_uuid;
+  this.start_date = reservation.start_date.substring(0, 10) + " " + reservation.start_date.substring(11, 19);//because it is ISO string it is fixed
+  this.end_date = reservation.end_date.substring(0, 10) + " " + reservation.end_date.substring(11, 19);
+  
+  
+};
+
 
 reservation.create = (newReservation, result) => {
+  
   sql.query("INSERT INTO reservation SET ?", newReservation, (err, res) => {
     if (err) {
       console.log("error: ", err)
@@ -63,7 +68,7 @@ reservation.removebyUuid = (uuid, result) => {
       console.log("error: ", err);
       console.log("user id",uuid);
       result(null, err);
-      //if cancellation of reservation is not successful then we need to charge one hour price to user
+      //if cancellation of reservation is not successful ,then we need to charge one hour price to user
       //var querystring = "select "
       return;
     }
