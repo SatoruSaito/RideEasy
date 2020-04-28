@@ -13,5 +13,4 @@ module.exports = app => {
 //Retrieve reservation details by user_uuid 
     app.get("/users/:userUuid/reservations", user.findReservationByUserUuid);
 
-
 };
