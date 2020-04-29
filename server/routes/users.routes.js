@@ -10,7 +10,5 @@ module.exports = app => {
 // Retrieve all membership details of a user by membership UUID
     app.get("/users/:userUuid/membership", user.findMembershipByUserUuid);  
     
-//Retrieve reservation details by user_uuid 
-    app.get("/users/:userUuid/reservations", user.findReservationByUserUuid);
 
 };

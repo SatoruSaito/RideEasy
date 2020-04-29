@@ -39,18 +39,35 @@ exports.create = (req, res) => {
  //Cancel reservation with user uuid and also check that cancel reservation should be successful only when the 
   //user tries to cancel reservation 1 hr prior to start time otherwise need to charge 1 hr price
   exports.delete = (req, res) => {
-    reservation.removebyUuid(req.params.uuid, (err, data) => {
+    reservation.removebyUuid(req.query.uuid, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found reservation records  with  uuid ${req.params.uuid}.`
+            message: `Not found reservation records  with  uuid ${req.query.uuid}.`
           });
         } else {
           res.status(500).send({
-            message: "Could not delete reservation with id " + req.params.uuid
+            message: "Could not delete reservation with id " + req.query.uuid
           });
         }
       } else res.send({ message: `reservation  was cancelled successfully!` });
     });
   };
+//get reservation by user uuid 
+  exports.findByUuid = (req, res) => {
+    reservation.getByUserId (req.query.userUuid, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `reservation  with the user uuid ${req.query.userUuid} not found.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving reservation with user uuid " + req.query.userUuid
+          });
+        }
+      } else res.send(data);
+  });
+  };
+  
 

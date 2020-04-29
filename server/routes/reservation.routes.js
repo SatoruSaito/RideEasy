@@ -7,7 +7,8 @@ module.exports = app => {
     console.log("here in routes");
 
     //cancel reservation by  uuid 
-    app.delete("/reservations/:uuid",Reservation.delete);
-
+    app.delete("/reservations?:uuid",Reservation.delete);
+    //get reservation by user uuid
+    app.get("/reservations?:useruuid", Reservation.findByUuid);
 
 }
