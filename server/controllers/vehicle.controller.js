@@ -79,7 +79,7 @@ exports.findVehicles = (req, res) => {
 // Retrieve a single vehicle with vehicle UUID
 
 exports.findVehicleByUuid = (req, res) => {
-  Vehicle.findVehicleByUuid(req.params.vehicleUuid, (err, data) => {
+  Vehicle.getVehicleByUuid(req.params.vehicleUuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
