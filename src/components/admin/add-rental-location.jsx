@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import Autocomplete from "react-google-autocomplete";
-import { useForm } from 'react-hook-form';
+import Autocomplete from "react-google-autocomplete"
+import { useForm } from "react-hook-form"
 import {
   MDBContainer,
   MDBBtn,
@@ -12,26 +12,26 @@ import {
   MDBNavbarBrand,
   MDBNavItem,
   MDBCollapse,
-  MDBNavbarNav
-} from "mdbreact";
+  MDBNavbarNav,
+} from "mdbreact"
 
 import { getZipcode, getState, getCity } from "../../utils/common"
-import appConfig from "../../config/app-config"
+import { appConfig } from "../../config/app-config"
 import { APIS } from "../../requests/api-helper.js"
 import logo from "../../images/rideeasy.png"
 
 const AddRentalLocation = () => {
-  const [address, setAddress] = useState();
+  const [address, setAddress] = useState()
 
   const handleChangeAddress = (place) => {
-    console.log(place);
+    console.log(place)
     setAddress(place)
   }
   const { register, handleSubmit, watch, errors } = useForm()
-  const onSubmit = ({capacity,name,number_of_vehicles}) => {
-    console.log("data",address)
+  const onSubmit = ({ capacity, name, number_of_vehicles }) => {
+    console.log("data", address)
     console.log("address", address && getZipcode(address.address_components))
-    console.log("state",address && getState(address.address_components))
+    console.log("state", address && getState(address.address_components))
 
     const payload = {
       name,
@@ -40,18 +40,17 @@ const AddRentalLocation = () => {
       address: address && address.formatted_address,
       zip_code: address && getZipcode(address.address_components),
       state: address && getState(address.address_components),
-      city: address && getCity(address.address_components)
+      city: address && getCity(address.address_components),
     }
-
 
     const options = {
       method: "POST",
       body: JSON.stringify(payload),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     }
-    const response = fetch(APIS.addLocation, options).then(res => console.log(res))
+    const response = fetch(APIS.addLocation, options).then((res) => console.log(res))
   }
 
   return (
@@ -78,7 +77,8 @@ const AddRentalLocation = () => {
                 <MDBBtn
                   color="indigo"
                   href={"/admin/membershipUpdate"}
-                  mdbWavesEffect>
+                  mdbWavesEffect
+                >
                   update membership
                 </MDBBtn>
               </MDBNavItem>
@@ -88,7 +88,12 @@ const AddRentalLocation = () => {
                 </MDBBtn>
               </MDBNavItem>
               <MDBNavItem>
-                <MDBBtn color="indigo" href={"/admin/addLocation"} mdbWavesEffect active>
+                <MDBBtn
+                  color="indigo"
+                  href={"/admin/addLocation"}
+                  mdbWavesEffect
+                  active
+                >
                   Add location
                 </MDBBtn>
               </MDBNavItem>
@@ -99,7 +104,7 @@ const AddRentalLocation = () => {
       <MDBContainer className="margin-top-50">
         <MDBCard className="col-md-7">
           <MDBCardBody>
-            <form onSubmit={handleSubmit(onSubmit)} >
+            <form onSubmit={handleSubmit(onSubmit)}>
               <p className="h4 text-center py-4 grey-text">Add a new Location</p>
               <div class="form-group row">
                 <label class="col-sm-5">Location</label>
@@ -117,27 +122,43 @@ const AddRentalLocation = () => {
               <div class="form-group row">
                 <label class="col-sm-5">Location Name</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" placeholder="Name" ref={register} name ="name"/>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Name"
+                    ref={register}
+                    name="name"
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <label class="col-sm-5">Capacity</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" placeholder="Capacity" ref={register} name ="capacity"/>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Capacity"
+                    ref={register}
+                    name="capacity"
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <label class="col-sm-5">No Of Vehicles</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" placeholder="No Of Vehicles" ref={register} name="number_of_vehicles" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="No Of Vehicles"
+                    ref={register}
+                    name="number_of_vehicles"
+                  />
                 </div>
               </div>
               <div className="text-center py-4 mt- o3">
-                <MDBBtn
-                  color="cyan"
-                  type="submit">
+                <MDBBtn color="cyan" type="submit">
                   ADD LOCATION
                 </MDBBtn>
               </div>

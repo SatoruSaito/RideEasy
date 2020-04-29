@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react"
 import { APIS } from "../requests/api-helper.js"
 import useFetch from "../hooks/hooks"
+import { store } from "react-notifications-component"
 
 import {
   MDBContainer,
@@ -20,17 +21,18 @@ import { useForm } from "react-hook-form"
 import logo from "../images/rideeasy.png"
 import "../css/vehicles.css"
 
-const VehicleDetails = ({ id }) => {
+const VehicleDetails = (props) => {
+  const vehicleId = props.match.params.id
+  const today = new Date()
   const [isSent, setIsSent] = useState(false)
-  const data = useFetch(`${APIS.vehicleDetails}/${id}`, {})
+  const data = useFetch(APIS.vehicleDetails(vehicleId), {})
 
-  const handleReserveCar = (e, startDate, endDate) => {
-    console.log("start", startDate)
+  const handleReserveCar = async (e, startDate, endDate) => {
     e.preventDefault()
     const options = {
       body: JSON.stringify({
-        user_uuid: "75442486-0878-440c-9db1-a7006c25a39f",
-        vehicle_uuid: id,
+        user_uuid: sessionStorage.getItem("userId"),
+        vehicle_uuid: vehicleId,
         start_date: startDate,
         end_date: endDate,
       }),
@@ -38,9 +40,38 @@ const VehicleDetails = ({ id }) => {
       headers: { "Content-Type": "application/json" },
     }
 
-    fetch(APIS.reserveACar, options)
-      .then(() => setIsSent(true))
-      .catch(() => alert("There was an error, please try again"))
+    try {
+      const response = await fetch(APIS.reserveACar, options)
+      store.addNotification({
+        title: "Vehicle Registration",
+        message: "Vehicle has been reserved successfully !!",
+        showIcon: true,
+        type: "success",
+        insert: "bottom",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true,
+        },
+      })
+    } catch {
+      store.addNotification({
+        title: "Vehicle reservation",
+        message: "Enable to reserve a vehicle",
+        showIcon: true,
+        type: "error",
+        insert: "bottom",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true,
+        },
+      })
+    }
   }
 
   const [startDate, setStartDate] = useState(new Date())
@@ -70,6 +101,7 @@ const VehicleDetails = ({ id }) => {
           </MDBCollapse>
         </MDBContainer>
       </MDBNavbar>
+
       <MDBContainer className="margin-top-50">
         <MDBRow>
           <MDBCol md="5">
@@ -141,6 +173,7 @@ const VehicleDetails = ({ id }) => {
                         onChange={(date) => setStartDate(date)}
                         showTimeSelect
                         format="yyyy-MM-dd hh:mm:ss"
+                        minDate={today}
                       />
                     </div>
                   </div>

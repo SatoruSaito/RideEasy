@@ -1,7 +1,7 @@
 const sql = require("./db.js")
 
 // constructor
-const User = function(user) {
+const User = function (user) {
   this.uuid = user.uuid
   this.first_name = user.first_name
   this.last_name = user.last_name
@@ -56,7 +56,9 @@ User.getByUuid = (userUuid, result) => {
 
 User.getMembershipByUserUuid = (userUuid, result) => {
   sql.query(
-    `SELECT M.user_uuid, M.status, M.uuid, M.start_date, M.end_date FROM membership M JOIN user U ON U.uuid = M.user_uuid WHERE U.uuid = \'${escape(userUuid)}\'`,
+    `SELECT M.user_uuid, M.status, M.uuid, M.start_date, M.end_date FROM membership M JOIN user U ON U.uuid = M.user_uuid WHERE U.uuid = \'${escape(
+      userUuid
+    )}\'`,
 
     (err, res) => {
       if (err) {
@@ -75,7 +77,6 @@ User.getMembershipByUserUuid = (userUuid, result) => {
     }
   )
 }
-
 
 // Update membership by user uuid
 User.putMembership = (userUuid, Membership, result) => {
@@ -105,7 +106,7 @@ User.putMembership = (userUuid, Membership, result) => {
 
       console.log("updated membership for the user: ", {
         id: userUuid,
-        ...Membership
+        ...Membership,
       })
       result(null, { id: userUuid, ...Membership })
     }
@@ -143,7 +144,7 @@ User.putProfile = (userUuid, User, result) => {
       User.email_address,
       User.address,
       User.credit_card_number,
-      userUuid
+      userUuid,
     ],
     (err, res) => {
       if (err) {
@@ -160,7 +161,7 @@ User.putProfile = (userUuid, User, result) => {
 
       console.log("updated profile for the user with UUID: ", {
         id: userUuid,
-        ...User
+        ...User,
       })
       result(null, { id: userUuid, ...User })
     }
@@ -168,21 +169,26 @@ User.putProfile = (userUuid, User, result) => {
 }
 
 User.getReservationByUserUuid = (userUuid, result) => {
-  sql.query(`SELECT R.uuid, R.vehicle_uuid, R.user_uuid, R.start_date, R.end_date FROM user U JOIN reservation R ON U.uuid = R.user_uuid WHERE U.uuid = \'${escape(userUuid)}\'`, (err, res) => {
+  sql.query(
+    `SELECT R.uuid, R.vehicle_uuid, R.user_uuid, R.start_date, R.end_date, R.is_pickedUp, R.is_car_returned FROM user U JOIN reservation R ON U.uuid = R.user_uuid WHERE U.uuid = \'${escape(
+      userUuid
+    )}\'`,
+    (err, res) => {
       if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
+        console.log("error: ", err)
+        result(err, null)
+        return
       }
 
       if (res.length) {
-          console.log("found Reservation details of given user: ", res[0]);
-          result(null, res[0]);
-          return;
+        console.log("found Reservation details of given user: ", res[0])
+        result(null, res[0])
+        return
       }
       // Reservation with the uuid not found
-      result({kind: "not_found"}, null);
-  });
-};
+      result({ kind: "not_found" }, null)
+    }
+  )
+}
 
 module.exports = User
