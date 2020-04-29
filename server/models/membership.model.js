@@ -56,27 +56,26 @@ Membership.getAllByUserUuid = (userUuid, result) => {
 
 // get specific member by membership UUID
 
-Membership.getByMembershipUuid = (membershipUuid, result) => {
-  console.log("given uuid = " + membershipUuid);
-  sql.query(
-    `SELECT * FROM membership WHERE membership.uuid = \'${escape(membershipUuid)}\'`,
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err)
-        result(err, null)
-        return
-      }
+// Membership.getByMembershipUuid = (membershipUuid, result) => {
+//   sql.query(
+//     `SELECT * FROM membership WHERE membership.uuid = \'${escape(membershipUuid)}\'`,
+//     (err, res) => {
+//       if (err) {
+//         console.log("error: ", err)
+//         result(err, null)
+//         return
+//       }
 
-      if (res.length) {
-        console.log("found membership: ", res[0])
-        result(null, res[0])
-        return
-      }
-      // member with the uuid not found
-      result({ kind: "not_found" }, null)
-    }
-  )
-}
+//       if (res.length) {
+//         console.log("found membership: ", res[0])
+//         result(null, res[0])
+//         return
+//       }
+//       // member with the uuid not found
+//       result({ kind: "not_found" }, null)
+//     }
+//   )
+// }
 
 //Update status of membership when admin deletes a member
 

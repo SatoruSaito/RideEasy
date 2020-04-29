@@ -8,7 +8,7 @@ module.exports = (app) => {
   app.get("/membership?:userUuid", membership.findAllByUserUuid);
 
 // For the admin to retrieve a specific member with membershipId
-  app.get("/membership?:membershipUuid", membership.findByMembershipUuid);
+// app.get("/membership?:membershipUuid", membership.findByMembershipUuid);
 
 // For the admin to terminate membership
   app.patch("/membership?:membershipUuid", membership.updateOne);
