@@ -171,4 +171,13 @@ FOREIGN KEY (user_uuid) REFERENCES user(uuid) ON UPDATE CASCADE ON DELETE CASCAD
 
 INSERT INTO reservation VALUES ('43243SFSRUWE','34W323FDS','423FSFDWE','2020-04-10 00:07:00','2020-04-21 00:07:00',NOW(),NOW());
 
+
+ALTER TABLE vehicle MODIFY last_serviced_date datetime;
+ALTER TABLE reservation MODIFY is_car_returned boolean;
+
+ALTER TABLE membership MODIFY start_date datetime;
+ALTER TABLE membership MODIFY end_date datetime;
+
+ALTER TABLE reservation ADD COLUMN is_car_returned boolean;
+ALTER TABLE reservation ADD COLUMN car_returned_date datetime;
 ---

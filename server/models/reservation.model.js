@@ -1,3 +1,4 @@
+const moment = require('moment');
 const sql = require("./db.js")
 
 // constructor
@@ -8,13 +9,13 @@ const reservation = function(reservation) {
   this.user_uuid = reservation.user_uuid;
   this.start_date = reservation.start_date.substring(0, 10) + " " + reservation.start_date.substring(11, 19);//because it is ISO string it is fixed
   this.end_date = reservation.end_date.substring(0, 10) + " " + reservation.end_date.substring(11, 19);
-  
-  
+
+
 };
 
 
 reservation.create = (newReservation, result) => {
-  
+
   sql.query("INSERT INTO reservation SET ?", newReservation, (err, res) => {
     if (err) {
       console.log("error: ", err)
@@ -43,8 +44,8 @@ reservation.create = (newReservation, result) => {
 
 
 
-//cancel reservation by reservations uuid 1 hr prior to start time and update is_reserve field to false 
-//in vehicle table else calculate the one hr price to charge on user and cancel reservation with update of 
+//cancel reservation by reservations uuid 1 hr prior to start time and update is_reserve field to false
+//in vehicle table else calculate the one hr price to charge on user and cancel reservation with update of
 //is_reserved field to false in vehicle table
 reservation.removebyUuid = (uuid, result) => {
   var vehicle_uuid;
@@ -54,7 +55,7 @@ reservation.removebyUuid = (uuid, result) => {
   sql.query(sql_qry_string,(err, res) => {
     if(err){
       console.log("error: ", err);
-      
+
       return;
     }
     console.log("vehicle_uuid from reservation");
@@ -69,7 +70,7 @@ reservation.removebyUuid = (uuid, result) => {
       console.log("error: ", err);
       console.log("reservation id",uuid);
       result(null, err);
-      
+
       return;
 
     }
@@ -84,7 +85,7 @@ reservation.removebyUuid = (uuid, result) => {
       sql.query(querystring,(err, res) => {
         if(err){
           console.log("error: ", err);
-          
+
           return;
         }
         console.log("cancellation fee calculated");
@@ -95,7 +96,7 @@ reservation.removebyUuid = (uuid, result) => {
         sql.query(query,(err, res) => {
           if(err){
             console.log("error: ", err);
-            
+
             return;
           }
           console.log("reservation got cancelled with cancellation fee =" +cancellation_fee);
@@ -106,15 +107,15 @@ reservation.removebyUuid = (uuid, result) => {
           sql.query(qrystring,(err, res) => {
           if(err){
           console.log("error: ", err);
-        
+
           return;
       }
-         
+
       console.log("vehicle table updated");
-     
-      
+
+
     });
-    
+
   });
 
 });
@@ -129,19 +130,19 @@ reservation.removebyUuid = (uuid, result) => {
     sql.query(qrystring,(err, res) => {
       if(err){
         console.log("error: ", err);
-        
+
         return;
       }
       console.log("vehicle table updated");
-     
-      
+
+
     }
    );
   });
 
   });
 
-  
+
 };
 //Get reservation by user uuid
 reservation.getByUserId = (userUuid, result) => {
@@ -163,6 +164,37 @@ reservation.getByUserId = (userUuid, result) => {
 };
 
 
+reservation.updateReservationForReturn = (reservationUuid, result) => {
+  let returned_date = moment.utc().local().format('YYYY-MM-DD HH:mm:ss')
+  console.log("LOCAL TIME",returned_date);
+  sql.query(
+      'UPDATE reservation SET is_car_returned = ?, car_returned_date = ?  WHERE uuid = ?',[true,returned_date,escape(reservationUuid)],
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err)
+          result(err, null)
+        } else {
+          console.log("reservation updated", res)
+          result(null, res)
+        }
+      }
+  )
+};
+
+reservation.increaseVehicleCount = (vehicle_uuid, result) => {
+  sql.query(
+      'UPDATE location SET number_of_vehicles = number_of_vehicles+1 WHERE uuid = (SELECT location_uuid from vehicle WHERE uuid =?)',[escape(vehicle_uuid)],
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err);
+          result(err, null)
+        } else {
+          console.log("Number_of_vehicles updated", res);
+          result(null, res)
+        }
+      }
+  )
+};
 
 module.exports = reservation;
 
