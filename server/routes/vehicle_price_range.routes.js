@@ -9,9 +9,9 @@ module.exports = app => {
   app.get("/vehiclepricerange", Pricerange.findAll);
 
   //route for updating the records based on uuid
-  app.put("/vehiclepricerange/:uuid", Pricerange.update);
+  app.put("/vehiclepricerange?:uuid", Pricerange.update);
 
   // Delete record with uuid
-  app.delete("/vehiclepricerange/:uuid", Pricerange.delete);
+  app.delete("/vehiclepricerange?:uuid", Pricerange.delete);
 
 };

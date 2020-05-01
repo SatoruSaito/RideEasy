@@ -46,47 +46,39 @@ exports.findAll = (req, res) => {
 else res.send(data);
 });
 };
-//update logic on vehicle_price_range table
-exports.update = (req, res) => {
-  // Validate Request
-  if (!req.body) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-  }
 
-  console.log(req.body);
-  //Update vehicle price_range fields such as min_hours,max_hours ,price ,late_fee based on uuid
-  pricerange.updateById(
-    req.params.uuid,
-    new pricerange(req.body),
-    (err, data) => {
+
+exports.update = (req, res) => {
+  pricerange.updateById(req.query.uuid,new pricerange(req.query) ,(err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found records with id ${req.params.uuid}.`
-        });
+          message: `price_range details with the uuid ${req.query.uuid} not found.`
+        })
       } else {
         res.status(500).send({
-          message: "Error updating table with uuid " + req.params.uuid
-        });
+          message:
+            "Error retrieving pricerange with uuid " + req.query.uuid
+        })
       }
-    } else res.send(data);
+    } else
+      res.send({
+        message: `price_rabge for ${req.query.uuid} updated successfully.`
+      })
+  })
 }
-);
-};
 
 // Delete a record with the specified uuid in the request for vehicle_price_range table
 exports.delete = (req, res) => {
-  pricerange.remove(req.params.uuid, (err, data) => {
+  pricerange.remove(req.query.uuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found record with id ${req.params.uuid}.`
+          message: `Not found record with id ${req.query.uuid}.`
         });
       } else {
         res.status(500).send({
-          message: "Could not delete record with id " + req.params.uuid
+          message: "Could not delete record with id " + req.query.uuid
         });
       }
     } else res.send({ message: `record was deleted successfully!` });

@@ -65,6 +65,7 @@ exports.findAllByUserUuid = (req, res) => {
 // For the admin to terminate membership
 
 exports.updateOne = (req, res) => {
+  
   Membership.patchByUuId(req.query.membershipUuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {

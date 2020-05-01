@@ -40,7 +40,7 @@ pricerange.getAll = result => {
 });
 };
 //update the fields min_hrs,max_hrs,price,late_fee based on uuid
-pricerange.updateById = (uuid, pricerange, result) => {
+pricerange.updateById = (uuid, pricerange , result) => {
   sql.query(
     "UPDATE vehicle_price_range SET min_hours = ?, max_hours = ?, price = ? ,late_fee = ? WHERE uuid = ?",
     [pricerange.min_hours, pricerange.max_hours, pricerange.price,pricerange.late_fee ,uuid],
