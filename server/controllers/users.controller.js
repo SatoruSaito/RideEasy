@@ -93,15 +93,15 @@ exports.updateMembershipByUserUuid = (req, res) => {
 
 // For user to see all unreserved vehicles available in the system
 
-exports.findAllVehicles = (req, res) => {
-  User.getAllVehicles((err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || "Error occurred while retrieving vehicles."
-      })
-    else res.send(data)
-  })
-}
+// exports.findAllVehicles = (req, res) => {
+//   User.getAllVehicles((err, data) => {
+//     if (err)
+//       res.status(500).send({
+//         message: err.message || "Error occurred while retrieving vehicles."
+//       })
+//     else res.send(data)
+//   })
+// }
 
 //For user to update his profile details including driver's license and credit card number
 

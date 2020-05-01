@@ -11,6 +11,6 @@ module.exports = (app) => {
   app.get("/vehicles", vehicles.findAllVehicles)
 
   // Retrieve a single vehicle with vehicleId
-  app.get("/vehicles_users?:vehicleUuid", vehicles.findByUuid)
+  app.get("/vehicles/:vehicleUuid", vehicles.findByUuid)
 
 }

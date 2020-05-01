@@ -22,7 +22,7 @@ Membership.create = (newMembership, result) => {
   })
 }
 
-//get all members from membership table, if user uuid is provided show details for that user only
+// For the admin to see all members, if user uuid is provided show details for that user only
 
 Membership.getAllByUserUuid = (userUuid, result) => {
   sql.query(
@@ -54,34 +54,13 @@ Membership.getAllByUserUuid = (userUuid, result) => {
   )
 }
 
-// get specific member by membership UUID
-
-// Membership.getByMembershipUuid = (membershipUuid, result) => {
-//   sql.query(
-//     `SELECT * FROM membership WHERE membership.uuid = \'${escape(membershipUuid)}\'`,
-//     (err, res) => {
-//       if (err) {
-//         console.log("error: ", err)
-//         result(err, null)
-//         return
-//       }
-
-//       if (res.length) {
-//         console.log("found membership: ", res[0])
-//         result(null, res[0])
-//         return
-//       }
-//       // member with the uuid not found
-//       result({ kind: "not_found" }, null)
-//     }
-//   )
-// }
-
-//Update status of membership when admin deletes a member
+// For the admin to terminate membership
 
 Membership.patchByUuId = (membershipUuid, result) => {
   sql.query(
-    `UPDATE rental_car_system.membership SET status = 'INACTIVE' WHERE uuid = \'${escape(membershipUuid)}\'`,
+    `UPDATE rental_car_system.membership SET status = 'INACTIVE' WHERE uuid = \'${escape(
+      membershipUuid
+    )}\'`,
     (err, res) => {
       if (err) {
         console.log("error: ", err)

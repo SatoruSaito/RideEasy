@@ -59,15 +59,15 @@ exports.findAll = (req, res) => {
 }
 
 exports.findByUuid = (req, res) => {
-  Vehicle.getByUuid(req.query.vehicleUuid, (err, data) => {
+  Vehicle.getByUuid(req.params.vehicleUuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Vehicle with uuid ${req.query.vehicleUuid}.`
+          message: `Not found Vehicle with uuid ${req.params.vehicleUuid}.`
         })
       } else {
         res.status(500).send({
-          message: "Error retrieving Vehicle with uuid " + req.query.vehicleUuid
+          message: "Error retrieving Vehicle with uuid " + req.params.vehicleUuid
         })
       }
     } else res.send(data)
