@@ -8,8 +8,7 @@ module.exports = app => {
 
     //cancel reservation by  uuid
     app.delete("/reservations/:uuid",Reservation.delete);
-    //get reservation by user uuid
-   // app.get("/reservations", Reservation.findByUuid);
+    
 
     //return vehicle
     app.put("/reservations/:reservation_uuid/return_vehicle",Reservation.returnVehicle);

@@ -9,7 +9,8 @@ const reservation = function(reservation) {
   this.user_uuid = reservation.user_uuid;
   this.start_date = reservation.start_date.substring(0, 10) + " " + reservation.start_date.substring(11, 19);//because it is ISO string it is fixed
   this.end_date = reservation.end_date.substring(0, 10) + " " + reservation.end_date.substring(11, 19);
-
+  this.is_car_returned = false;
+  this.is_pickedUp = false;
 
 };
 
@@ -45,8 +46,7 @@ reservation.create = (newReservation, result) => {
 
 
 //cancel reservation by reservations uuid 1 hr prior to start time and update is_reserve field to false
-//in vehicle table else calculate the one hr price to charge on user and cancel reservation with update of
-//is_reserved field to false in vehicle table
+//in vehicle table else calculate the one hr price to charge on user and cancel reservation 
 reservation.removebyUuid = (uuid, result) => {
   var vehicle_uuid;
   var cancellation_fee;
@@ -102,7 +102,7 @@ reservation.removebyUuid = (uuid, result) => {
           console.log("reservation got cancelled with cancellation fee =" +cancellation_fee);
           console.log("res"+res);
           result(null,res);
-          var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
+          /*var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
           console.log("querystring = " + qrystring);
           sql.query(qrystring,(err, res) => {
           if(err){
@@ -114,7 +114,7 @@ reservation.removebyUuid = (uuid, result) => {
       console.log("vehicle table updated");
 
 
-    });
+    });*/
 
   });
 
@@ -125,7 +125,7 @@ reservation.removebyUuid = (uuid, result) => {
     console.log("deleted reservation record with reservation id: ", uuid);
     result(null, res);
     console.log(res);
-    var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
+    /*var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
     console.log("querystring = " + qrystring);
     sql.query(qrystring,(err, res) => {
       if(err){
@@ -137,31 +137,14 @@ reservation.removebyUuid = (uuid, result) => {
 
 
     }
-   );
+   );*/
   });
 
   });
 
 
 };
-//Get reservation by user uuid
-/*reservation.getByUserId = (userUuid, result) => {
-  sql.query(`SELECT * FROM reservation WHERE user_uuid = \'${escape(userUuid)}\'`, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
 
-    if (res.length) {
-    console.log("found reservation: ", res[0]);
-    result(null, res[0]);
-    return;
-  }
-  //reservation  with the user uuid not found
-  result({kind: "not_found"}, null);
-});
-};*/
 
 
 reservation.updateReservationForReturn = (reservationUuid, result) => {

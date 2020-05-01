@@ -53,22 +53,6 @@ exports.create = (req, res) => {
       } else res.send({ message: `reservation  was cancelled successfully!` });
     });
   };
-/*//get reservation by user uuid
-  exports.findByUuid = (req, res) => {
-    reservation.getByUserId (req.query.userUuid, (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `reservation  with the user uuid ${req.query.userUuid} not found.`
-          });
-        } else {
-          res.status(500).send({
-            message: "Error retrieving reservation with user uuid " + req.query.userUuid
-          });
-        }
-      } else res.send(data);
-  });
-  };*/
 
 exports.returnVehicle =(req,res) => {
   console.log("INSIDE returnVehicle CONTROLER");
