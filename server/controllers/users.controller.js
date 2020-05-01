@@ -120,3 +120,20 @@ exports.updateProfileByUserUuid = (req, res) => {
     } else res.send(data)
   })
 }
+
+//Retrieve reservation by user uuid
+exports.findReservationByUserUuid = (req, res) => {
+  User.getReservationByUserUuid(req.params.userUuid, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Reservation with the user uuid ${req.params.userUuid} not found.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving reservation with uuid " + req.params.userUuid
+        });
+      }
+    } else res.send(data);
+  });
+};

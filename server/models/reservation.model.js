@@ -145,7 +145,7 @@ reservation.removebyUuid = (uuid, result) => {
 
 };
 //Get reservation by user uuid
-reservation.getByUserId = (userUuid, result) => {
+/*reservation.getByUserId = (userUuid, result) => {
   sql.query(`SELECT * FROM reservation WHERE user_uuid = \'${escape(userUuid)}\'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -161,7 +161,7 @@ reservation.getByUserId = (userUuid, result) => {
   //reservation  with the user uuid not found
   result({kind: "not_found"}, null);
 });
-};
+};*/
 
 
 reservation.updateReservationForReturn = (reservationUuid, result) => {

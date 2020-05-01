@@ -49,36 +49,36 @@ else res.send(data);
 
 
 exports.update = (req, res) => {
-  pricerange.updateById(req.query.uuid,new pricerange(req.query) ,(err, data) => {
+  pricerange.updateById(req.params.uuid,new pricerange(req.body) ,(err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `price_range details with the uuid ${req.query.uuid} not found.`
+          message: `price_range details with the uuid ${req.params.uuid} not found.`
         })
       } else {
         res.status(500).send({
           message:
-            "Error retrieving pricerange with uuid " + req.query.uuid
+            "Error retrieving pricerange with uuid " + req.params.uuid
         })
       }
     } else
       res.send({
-        message: `price_rabge for ${req.query.uuid} updated successfully.`
+        message: `price_range for ${req.params.uuid} updated successfully.`
       })
   })
 }
 
 // Delete a record with the specified uuid in the request for vehicle_price_range table
 exports.delete = (req, res) => {
-  pricerange.remove(req.query.uuid, (err, data) => {
+  pricerange.remove(req.params.uuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found record with id ${req.query.uuid}.`
+          message: `Not found record with id ${req.params.uuid}.`
         });
       } else {
         res.status(500).send({
-          message: "Could not delete record with id " + req.query.uuid
+          message: "Could not delete record with id " + req.params.uuid
         });
       }
     } else res.send({ message: `record was deleted successfully!` });

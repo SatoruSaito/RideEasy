@@ -167,4 +167,22 @@ User.putProfile = (userUuid, User, result) => {
   )
 }
 
+User.getReservationByUserUuid = (userUuid, result) => {
+  sql.query(`SELECT R.uuid, R.vehicle_uuid, R.user_uuid, R.start_date, R.end_date FROM user U JOIN reservation R ON U.uuid = R.user_uuid WHERE U.uuid = \'${escape(userUuid)}\'`, (err, res) => {
+      if (err) {
+          console.log("error: ", err);
+          result(err, null);
+          return;
+      }
+
+      if (res.length) {
+          console.log("found Reservation details of given user: ", res[0]);
+          result(null, res[0]);
+          return;
+      }
+      // Reservation with the uuid not found
+      result({kind: "not_found"}, null);
+  });
+};
+
 module.exports = User

@@ -19,4 +19,7 @@ module.exports = app => {
 //For user to update his profile details including driver's license and credit card number
     app.put("/users/:userUuid", user.updateProfileByUserUuid);
 
+    //For user to get his reservation details on his user id
+    app.get("/users/:userUuid/reservations", user.findReservationByUserUuid);
+
 };
