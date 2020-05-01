@@ -39,15 +39,15 @@ exports.create = (req, res) => {
 //retrieve specific user by user uuid
 
 exports.findByUuid = (req, res) => {
-  User.getByUuid(req.query.userUuid, (err, data) => {
+  User.getByUuid(req.params.userUuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `user with the uuid ${req.query.userUuid} not found.`
+          message: `user with the uuid ${req.params.userUuid} not found.`
         })
       } else {
         res.status(500).send({
-          message: "Error retrieving user with uuid " + req.query.userUuid
+          message: "Error retrieving user with uuid " + req.params.userUuid
         })
       }
     } else res.send(data)
@@ -75,15 +75,15 @@ exports.findMembershipByUserUuid = (req, res) => {
 // For the user to terminate/ extend membership
 
 exports.updateMembershipByUserUuid = (req, res) => {
-  User.putMembership(req.query.userUuid, new Membership(req.body), (err, data) => {
+  User.putMembership(req.params.userUuid, new Membership(req.body), (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `membership with the uuid ${req.query.userUuid} not found.`
+          message: `membership with the uuid ${req.params.userUuid} not found.`
         })
       } else {
         res.status(500).send({
-          message: "Error retrieving membership with uuid " + req.query.userUuid
+          message: "Error retrieving membership with uuid " + req.params.userUuid
         })
       }
     } else res.send(data)
@@ -106,15 +106,15 @@ exports.findAllVehicles = (req, res) => {
 //For user to update his profile details including driver's license and credit card number
 
 exports.updateProfileByUserUuid = (req, res) => {
-  User.putProfile(req.query.userUuid, new User(req.body), (err, data) => {
+  User.putProfile(req.params.userUuid, new User(req.body), (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `profile with the user uuid ${req.query.userUuid} not found.`
+          message: `profile with the user uuid ${req.params.userUuid} not found.`
         })
       } else {
         res.status(500).send({
-          message: "Error retrieving profile with uuid " + req.query.userUuid
+          message: "Error retrieving profile with uuid " + req.params.userUuid
         })
       }
     } else res.send(data)
