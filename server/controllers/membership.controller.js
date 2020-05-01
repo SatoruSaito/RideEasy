@@ -43,44 +43,24 @@ exports.findAllByUserUuid = (req, res) => {
   })
 }
 
- //For the admin to retrieve a specific member with membershipId
-
-// exports.findByMembershipUuid = (req, res) => {
-//   Membership.getByMembershipUuid(req.query.membershipUuid, (err, data) => {
-//     if (err) {
-//       if (err.kind === "not_found") {
-//         res.status(404).send({
-//           message: `membership with the uuid ${req.query.membershipUuid} not found.`
-//         })
-//       } else {
-//         res.status(500).send({
-//           message:
-//             "Error retrieving membership with uuid " + req.query.membershipUuid
-//         })
-//       }
-//     } else res.send(data)
-//   })
-// }
-
 // For the admin to terminate membership
 
 exports.updateOne = (req, res) => {
-  
-  Membership.patchByUuId(req.query.membershipUuid, (err, data) => {
+  Membership.patchByUuId(req.params.membershipUuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `membership with the uuid ${req.query.membershipUuid} not found.`
+          message: `membership with the uuid ${req.params.membershipUuid} not found.`
         })
       } else {
         res.status(500).send({
           message:
-            "Error retrieving membership with uuid " + req.query.membershipUuid
+            "Error retrieving membership with uuid " + req.params.membershipUuid
         })
       }
     } else
       res.send({
-        message: `membership status for ${req.query.membershipUuid} updated successfully.`
+        message: `membership status for ${req.params.membershipUuid} updated successfully.`
       })
   })
 }
