@@ -114,21 +114,21 @@ User.putMembership = (userUuid, Membership, result) => {
 
 // For user to see all unreserved vehicles available in the system
 
-User.getAllVehicles = (result) => {
-  sql.query(
-    "SELECT * FROM vehicle WHERE vehicle.is_reserved = false",
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err)
-        result(null, err)
-        return
-      }
+// User.getAllVehicles = (result) => {
+//   sql.query(
+//     "SELECT * FROM vehicle WHERE vehicle.is_reserved = false",
+//     (err, res) => {
+//       if (err) {
+//         console.log("error: ", err)
+//         result(null, err)
+//         return
+//       }
 
-      console.log("vehicles: ", res)
-      result(null, res)
-    }
-  )
-}
+//       console.log("vehicles: ", res)
+//       result(null, res)
+//     }
+//   )
+// }
 
 // Update user profile with details like credit card, drivers license etc
 User.putProfile = (userUuid, User, result) => {
