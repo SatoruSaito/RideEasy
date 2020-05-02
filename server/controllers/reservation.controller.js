@@ -68,6 +68,8 @@ exports.returnVehicle =(req,res) => {
         });
       }
     } else {
+      if(data.changedRows == 0)
+        return res.send({message:"Vehicle has been previously returned"});
       reservation.increaseVehicleCount(req.body.vehicle_uuid,(err,data) =>{
         if (err) {
           if (err.kind === "not_found") {
@@ -80,7 +82,10 @@ exports.returnVehicle =(req,res) => {
             });
           }
         }else{
-          res.send({"message":"Car returned successfully"});
+          reservation.calculateCharges(req.body.vehicle_uuid ,req.body.start_date, req.body.end_date,(err,reservation_charges) =>{
+            res.send(reservation_charges);
+          });
+
         }
       })
     }

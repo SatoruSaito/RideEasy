@@ -1,3 +1,4 @@
+const Vehicle = require("./vehicle.model")
 const moment = require('moment');
 const sql = require("./db.js")
 
@@ -153,7 +154,7 @@ reservation.updateReservationForReturn = (reservationUuid, result) => {
   let returned_date = moment.utc().format('YYYY-MM-DD HH:mm:ss')
   console.log("LOCAL TIME",returned_date);
   sql.query(
-      'UPDATE reservation SET is_car_returned = ?, car_returned_date = ?  WHERE uuid = ?',[true,returned_date,escape(reservationUuid)],
+      'UPDATE reservation SET is_car_returned = ?, car_returned_date = ?  WHERE uuid = ? AND is_car_returned = ?',[true,returned_date,escape(reservationUuid),0],
       (err, res) => {
         if (err) {
           console.log("error: ", err)
@@ -217,6 +218,38 @@ reservation.updateispickedup = (uuid, result) => {
 
 });
 };
+
+reservation.calculateCharges = (vehicle_uuid, start_date, end_date,reservation_charges) => {
+  let rental_charges = 0;
+  let late_fee_charges = 0;
+  Vehicle.getVehicleByUuid(vehicle_uuid,(err, vehicleDetails) => {
+    if (err) {
+      console.log("Unable to find vehicle with vehicle_uuid ",vehicle_uuid);
+    }
+
+    // console.log("vehicle details ",vehicleDetails);
+    let diff_ms = moment(end_date).diff(moment(start_date));
+
+    // var duration = moment.duration(req.body.end_date.diff(req.body.start_date));
+    let totalHours = moment.duration(diff_ms).asHours();
+    sql.query(`SELECT price, late_fee from vehicle_price_range vpr where vpr.min_hours <= ${totalHours} and vpr.max_hours >= ${totalHours} and vpr.vehicle_type_uuid = \'${vehicleDetails. vehicle_type_uuid}\'`, (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      rental_charges = res[0].price;
+      let current_date_time = moment.utc().local().format('YYYY-MM-DD HH:mm:ss');
+      if(moment(current_date_time).isAfter(moment(end_date).format('YYYY-MM-DD HH:mm:ss'))) {
+        let extra_time = moment(current_date_time).diff(moment(end_date));
+        let extra_hours = moment.duration(extra_time).asHours();
+        late_fee_charges = res[0].late_fee * extra_hours;
+      }
+      reservation_charges(null, {"reservation_charges":rental_charges,"late_fees":late_fee_charges,"total_charges":rental_charges+late_fee_charges});
+    });
+
+  })
+}
 
 module.exports = reservation;
 

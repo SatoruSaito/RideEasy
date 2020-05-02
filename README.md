@@ -178,6 +178,17 @@ ALTER TABLE reservation MODIFY is_car_returned boolean;
 ALTER TABLE membership MODIFY start_date datetime;
 ALTER TABLE membership MODIFY end_date datetime;
 
-ALTER TABLE reservation ADD COLUMN is_car_returned boolean;
-ALTER TABLE reservation ADD COLUMN car_returned_date datetime;
+ALTER TABLE reservation ADD COLUMN is_car_returned boolean; \
+ALTER TABLE reservation ADD COLUMN car_returned_date datetime; \
+
+CREATE TABLE `policy` (
+  `uuid` varchar(255) NOT NULL,
+  `price` int NOT NULL,
+  `time_in_months` int NOT NULL,
+  `is_expired` boolean NOT NULL DEFAULT false,
+   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY (`uuid`)\
+)
+	ALTER TABLE reservation ADD COLUMN is_pickedUp boolean
 ---

@@ -9,7 +9,7 @@ exports.getAll = (req,res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Error occurred while retrieving locations."
+                    err.message || "Error occurred while retrieving vehicle types."
             });
         res.send(data);
     });
