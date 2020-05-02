@@ -40,24 +40,40 @@ exports.create = (req, res) => {
 
 // Retrieve all unreserved Vehicles which satisfy the search criteria
 
-exports.findBySearchCriteria = (req, res) => {
-  Vehicle.getBySearchCriteria(
-    req.query.vehicle_type,
-    req.query.location,
-    req.query.reservation_start_time,
-    req.query.reservation_end_time,
-    (err, data) => {
+exports.findVehicles = (req, res) => {
+  // All query params are mandatory from UI
+  if(req.query.vehicle_type_uuid &&
+      req.query.location_uuid &&
+      req.query.reservation_start_time &&
+      req.query.reservation_end_time) {
+    Vehicle.getBySearchCriteria(
+        req.query.vehicle_type_uuid,
+        req.query.location_uuid,
+        req.query.reservation_start_time,
+        req.query.reservation_end_time,
+        (err, data) => {
+          if (err)
+            res.status(500).send({
+              message: err.message || "Error occurred while retrieving vehicles."
+            })
+          else {
+            console.log("here in findbysearch");
+            console.log(data)
+            res.send(data)
+          }
+        }
+    )
+  }
+  else {
+    Vehicle.getAllVehicles((err, data) => {
       if (err)
         res.status(500).send({
-          message: err.message || "Error occurred while retrieving vehicles."
+          message: err.message || "Error occurred while retrieving membership."
         })
-      else {
-        console.log("here in findbysearch");
-        console.log(data)
-        res.send(data)
-      }
-    }
-  )
+      else res.send(data)
+    })
+  }
+
 }
 
 // Retrieve a single vehicle with vehicle UUID
@@ -75,17 +91,5 @@ exports.findVehicleByUuid = (req, res) => {
         })
       }
     } else res.send(data)
-  })
-}
-
-// For the admin to see all vehicles
-
-exports.findAllVehicles = (req, res) => {
-  Vehicle.getAllVehicles((err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || "Error occurred while retrieving membership."
-      })
-    else res.send(data)
   })
 }
