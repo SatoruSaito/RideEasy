@@ -3,4 +3,8 @@ module.exports = app => {
 
 // Add a new policy
     app.post("/policy", policy.create);
+
+    // Get all policies
+    app.get("/policy", policy.findAll);
 };
+

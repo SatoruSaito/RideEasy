@@ -80,14 +80,14 @@ exports.returnVehicle =(req,res) => {
             });
           }
         }else{
-          res.send(data);
+          res.send({"message":"Car returned successfully"});
         }
       })
     }
   });
 };
 
-//Update is_pickeUp in reservation table when user clicks pick up 
+//Update is_pickeUp in reservation table when user clicks pick up
 //and also decrement the count of nor of vehicles in location table
 
 exports.updateispickedup = (req, res) => {

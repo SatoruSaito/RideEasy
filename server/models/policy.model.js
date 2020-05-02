@@ -20,5 +20,17 @@ Policy.create = (newPolicy, result) => {
     });
 };
 
+Policy.getAll = result => {
+    sql.query("SELECT * FROM policy", (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log("policies: ", res);
+        result(null, res);
+    });
+};
+
 
 module.exports = Policy;
