@@ -179,5 +179,42 @@ reservation.increaseVehicleCount = (vehicle_uuid, result) => {
   )
 };
 
+//This is to update is_pickedUp to true and decrement the nor of vehicles in the location table
+
+reservation.updateispickedup = (uuid, result) => {
+  sql.query(
+    "UPDATE reservation SET is_pickedUp = true WHERE uuid = ?",[uuid],
+    (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+    // not found records with the uuid
+    result({ kind: "not_found" }, null);
+    return;
+  }
+
+  console.log("updated price_range_table: ", { id: uuid, ...reservation });
+  result(null, { id: uuid, ...reservation });
+    var qrystring = "update  location l inner join  vehicle v on l.uuid = v.location_uuid inner join reservation r on v.uuid = r.vehicle_uuid set l.number_of_vehicles =l.number_of_vehicles-1 where r.is_pickedUp = true and l.uuid = v.location_uuid;";
+          console.log("querystring = " + qrystring);
+          sql.query(qrystring,(err, res) => {
+          if(err){
+          console.log("error: ", err);
+
+          return;
+      }
+
+      console.log("location  table updated");
+
+
+    });
+ 
+});
+};
+
 module.exports = reservation;
 

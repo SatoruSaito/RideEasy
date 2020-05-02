@@ -87,4 +87,27 @@ exports.returnVehicle =(req,res) => {
   });
 };
 
+//Update is_pickeUp in reservation table when user clicks pick up 
+//and also decrement the count of nor of vehicles in location table
+
+exports.updateispickedup = (req, res) => {
+  reservation.updateispickedup(req.params.uuid,(err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `reservation details  to update is_pickedUp with the uuid ${req.params.uuid} not found.`
+        })
+      } else {
+        res.status(500).send({
+          message:
+            "Error retrieving reservation details to update is_pickedUp with uuid " + req.params.uuid
+        })
+      }
+    } else
+      res.send({
+        message: `is_pickedUp for reservation uuid ${req.params.uuid} updated successfully.`
+      })
+  })
+}
+
 

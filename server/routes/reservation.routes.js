@@ -13,4 +13,7 @@ module.exports = app => {
     //return vehicle
     app.put("/reservations/:reservation_uuid/return_vehicle",Reservation.returnVehicle);
 
+    //Updating is pickedup field 
+    app.put("/reservations/:uuid",Reservation.updateispickedup);
+
 }
