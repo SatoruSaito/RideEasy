@@ -52,6 +52,7 @@ exports.findBySearchCriteria = (req, res) => {
           message: err.message || "Error occurred while retrieving vehicles."
         })
       else {
+        console.log("here in findbysearch");
         console.log(data)
         res.send(data)
       }
