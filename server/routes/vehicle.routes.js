@@ -4,13 +4,15 @@ module.exports = (app) => {
   // Create a new Vehicle
   app.post("/vehicles", vehicles.create)
 
-  // Get all unreserved vehicles that satisfy the search criteria
-  app.get("/vehicles_all/:vehicleType/:city/:startTime", vehicles.findAll)
+  // Retrieve all unreserved Vehicles which satisfy the search criteria
+  app.get(
+    "/vehicles?:vehicle_type?:location?:reservation_start_time?:reservation_end_time",
+    vehicles.findBySearchCriteria
+  )
 
-  //For Admin to retrieve all vehicles in the system
-  app.get("/vehicles", vehicles.findAllVehicles)
+  // Retrieve a single vehicle with vehicle UUID
+  app.get("/vehicles/:vehicleUuid", vehicles.findVehicleByUuid)
 
-  // Retrieve a single vehicle with vehicleId
-  app.get("/vehicles/:vehicleUuid", vehicles.findByUuid)
-
+   //For Admin to retrieve all vehicles in the system
+   app.get("/vehicles", vehicles.findAllVehicles)
 }

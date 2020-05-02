@@ -38,13 +38,14 @@ exports.create = (req, res) => {
   })
 }
 
-// Retrieve all unreserved Vehicles from the database which satisfy the search criteria
+// Retrieve all unreserved Vehicles which satisfy the search criteria
 
-exports.findAll = (req, res) => {
-  Vehicle.getAll(
-    req.params.vehicleType,
-    req.params.city,
-    req.params.startTime,
+exports.findBySearchCriteria = (req, res) => {
+  Vehicle.getBySearchCriteria(
+    req.query.vehicle_type,
+    req.query.location,
+    req.query.reservation_start_time,
+    req.query.reservation_end_time,
     (err, data) => {
       if (err)
         res.status(500).send({
@@ -58,8 +59,10 @@ exports.findAll = (req, res) => {
   )
 }
 
-exports.findByUuid = (req, res) => {
-  Vehicle.getByUuid(req.params.vehicleUuid, (err, data) => {
+// Retrieve a single vehicle with vehicle UUID
+
+exports.findVehicleByUuid = (req, res) => {
+  Vehicle.findVehicleByUuid(req.params.vehicleUuid, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
