@@ -1,19 +1,20 @@
 const sql = require("./db.js")
-
+const moment = require('moment');
+// constructor
 // constructor
 const Vehicle = function(vehicle) {
-  this.uuid = vehicle.uuid
-  this.vehicle_type_uuid = vehicle.vehicle_type_uuid
-  this.model = vehicle.model
-  this.make = vehicle.make
-  this.year = vehicle.year
-  this.registration_number = vehicle.registration_number
-  this.current_mileage = vehicle.current_mileage
-  this.last_serviced_date = vehicle.last_serviced_date
-  this.is_reserved = vehicle.is_reserved
-  this.vehicle_condition = vehicle.vehicle_condition
-  this.next_available_time = vehicle.next_available_time
-  this.location_uuid = vehicle.location_uuid
+    this.uuid = vehicle.uuid
+    this.vehicle_type_uuid = vehicle.vehicle_type_uuid
+    this.model = vehicle.model
+    this.make = vehicle.make
+    this.year = vehicle.year
+    this.registration_number = vehicle.registration_number
+    this.current_mileage = vehicle.current_mileage
+    this.last_serviced_date = moment(vehicle.last_serviced_date).utc().format('YYYY-MM-DD HH:mm:ss');
+    this.is_reserved = vehicle.is_reserved
+    this.vehicle_condition = vehicle.vehicle_condition
+    this.next_available_time = moment(vehicle.next_available_time).utc().format('YYYY-MM-DD HH:mm:ss');
+    this.location_uuid = vehicle.location_uuid
 }
 
 Vehicle.create = (newVehicle, result) => {

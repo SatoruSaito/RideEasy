@@ -9,8 +9,8 @@ const reservation = function(reservation) {
   this.user_uuid = reservation.user_uuid;
   //this.start_date = reservation.start_date.substring(0, 10) + " " + reservation.start_date.substring(11, 19);//because it is ISO string it is fixed
   //this.end_date = reservation.end_date.substring(0, 10) + " " + reservation.end_date.substring(11, 19);
-  this.start_date = moment(reservation.start_date).format('YYYY-MM-DD HH:mm:ss');
-  this.end_date = moment(reservation.end_date).format('YYYY-MM-DD HH:mm:ss')
+  this.start_date = moment(reservation.start_date).utc().format('YYYY-MM-DD HH:mm:ss');
+  this.end_date = moment(reservation.end_date).utc().format('YYYY-MM-DD HH:mm:ss');
   this.is_car_returned = false;
   this.is_pickedUp = false;
 
