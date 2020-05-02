@@ -31,8 +31,8 @@ Vehicle.create = (newVehicle, result) => {
 
 
 Vehicle.getBySearchCriteria = (
-  vehicle_type,
-  location,
+  vehicle_type_uuid,
+  location_uuid,
   reservation_start_time,
   reservation_end_time,
   result
@@ -41,10 +41,8 @@ Vehicle.getBySearchCriteria = (
   reservation_end_time = Date.parse(reservation_end_time);
   console.log("inside getBySearchCriteria");
   query =     `SELECT V.uuid FROM 
-  vehicle V JOIN vehicle_type T ON V.vehicle_type_uuid = T.uuid 
-  JOIN location L ON V.location_uuid = L.uuid 
-  WHERE T.type = \'${escape(vehicle_type)}\' AND
-  L.city = \'${escape(location)}\'`;
+  vehicle V WHERE V.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\' AND
+  V.location_uuid = \'${escape(location_uuid)}\'`;
   sql.query(
     query,
     (err, res) => {
@@ -59,8 +57,7 @@ Vehicle.getBySearchCriteria = (
       if(!res.length)
       {
           query = `SELECT V.uuid FROM 
-          vehicle V JOIN vehicle_type T ON V.vehicle_type_uuid = T.uuid 
-          WHERE T.type = \'${escape(vehicle_type)}\'`;
+  vehicle V WHERE V.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\'`;
           sql.query(
             query,
             (err, res) => {
@@ -86,8 +83,8 @@ Vehicle.getBySearchCriteria = (
             console.log("error: ", err)
             result(null, err)
             return
-          } 
-          
+          }
+
           console.log("res= " + JSON.stringify(res));
           var reservations_map = {};
           for (var i = 0; i < res.length; i++)
@@ -95,7 +92,7 @@ Vehicle.getBySearchCriteria = (
             if (!reservations_map[res[i].vehicle_uuid])
             {
               reservations_map[res[i].vehicle_uuid] = [];
-            } 
+            }
             reservations_map[res[i].vehicle_uuid].push({start_date: res[i].start_date, end_date: res[i].end_date})
           }
 
@@ -134,13 +131,13 @@ Vehicle.getBySearchCriteria = (
                     available.push(vehicle_uuid);
                     break;
                   }
-                }              
+                }
               }
             }
           }
           result(null, available);
           return;
-        } 
+        }
       )
     }
   )
