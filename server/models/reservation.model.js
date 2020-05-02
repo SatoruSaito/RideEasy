@@ -48,7 +48,7 @@ reservation.create = (newReservation, result) => {
 
 
 //cancel reservation by reservations uuid 1 hr prior to start time and update is_reserve field to false
-//in vehicle table else calculate the one hr price to charge on user and cancel reservation 
+//in vehicle table else calculate the one hr price to charge on user and cancel reservation
 reservation.removebyUuid = (uuid, result) => {
   var vehicle_uuid;
   var cancellation_fee;
@@ -150,7 +150,7 @@ reservation.removebyUuid = (uuid, result) => {
 
 
 reservation.updateReservationForReturn = (reservationUuid, result) => {
-  let returned_date = moment.utc().local().format('YYYY-MM-DD HH:mm:ss')
+  let returned_date = moment.utc().format('YYYY-MM-DD HH:mm:ss')
   console.log("LOCAL TIME",returned_date);
   sql.query(
       'UPDATE reservation SET is_car_returned = ?, car_returned_date = ?  WHERE uuid = ?',[true,returned_date,escape(reservationUuid)],
@@ -214,7 +214,7 @@ reservation.updateispickedup = (uuid, result) => {
 
 
     });
- 
+
 });
 };
 
