@@ -6,4 +6,7 @@ module.exports = app => {
 
 //Get all vehicle types
     app.get("/vehicle_type", VehicleType.getAll);
+
+//Get vechicle price range details by vehicle type
+    app.get("/vehicle_type/:uuid/vehiclepricerange", VehicleType.findPricerangebyVehicleType);
 };

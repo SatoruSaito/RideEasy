@@ -31,4 +31,32 @@ VehicleType.getAll = result => {
     });
 };
 
+//Retrieve vehicle price range by vehicle type
+
+VehicleType.getPriceRangeByVehicleType = (vehicleTypeUuid, result) => {
+    console.log("vehicle_type_uuid",vehicleTypeUuid);
+    var qrystring = `SELECT * FROM vehicle_price_range WHERE vehicle_type_uuid = \'${escape(vehicleTypeUuid)}\';`;
+    console.log("query =" + qrystring);
+    sql.query(qrystring,
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err)
+          result(err, null)
+          return
+        }
+  
+        if (res.length) {
+          console.log("found vehicle price range with vehicle type uuid: ", res)
+          result(null, res)
+          return
+        }
+        // not found vehicle with the uuid
+        result({ kind: "not_found" }, null)
+      }
+    )
+  }
+  
+
+  
+
 module.exports = VehicleType;

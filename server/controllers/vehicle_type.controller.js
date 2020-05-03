@@ -38,4 +38,21 @@ exports.create = (req, res) => {
     });
 };
 
+//Fetch the vehicle price range details based on vehicle type
 
+exports.findPricerangebyVehicleType = (req, res) => {
+    VehicleType.getPriceRangeByVehicleType(req.params.uuid, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found vehicle price range with vehicle type uuid ${req.params.uuid}.`
+          })
+        } else {
+          res.status(500).send({
+            message: "Error retrieving Vehicle price range with vehicle type uuid " + req.params.uuid
+          })
+        }
+      } else res.send(data)
+    })
+  }
+  

@@ -195,8 +195,8 @@ User.getReservationByUserUuid = (userUuid, result) => {
       }
 
       if (res.length) {
-          console.log("found Reservation details of given user: ", res[0]);
-          result(null, res[0]);
+          console.log("found Reservation details of given user: ", res);
+          result(null, res);
           return;
       }
       // Reservation with the uuid not found
