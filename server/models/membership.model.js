@@ -1,11 +1,11 @@
 const sql = require("./db.js")
-
+const moment = require('moment');
 // constructor
 const Membership = function(membership) {
   this.uuid = membership.uuid
   this.user_uuid = membership.user_uuid
-  this.start_date = membership.start_date
-  this.end_date = membership.end_date
+  this.start_date = moment.utc(membership.start_date).format('YYYY-MM-DD HH:mm:ss')
+  this.end_date = moment.utc(membership.end_date).format('YYYY-MM-DD HH:mm:ss')
   this.status = membership.status
 }
 

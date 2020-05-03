@@ -168,6 +168,17 @@ User.putProfile = (userUuid, User, result) => {
         id: userUuid,
         ...User
       })
+        sql.query(
+            `UPDATE membership SET status = ? WHERE user_uuid = ?`,
+            ['PENDING',userUuid],
+            (err, res) => {
+                if (err) {
+                    console.log("error: ", err)
+                    result(null, err)
+                    return
+                }
+            }
+        )
       result(null, { id: userUuid, ...User })
     }
   )
