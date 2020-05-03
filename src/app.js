@@ -8,7 +8,8 @@ import VehicleDetails from "./components/vehicle-details"
 import Callback from "./components/callback"
 import Admin from "./components/admin"
 import AddLoaction from "./components/admin/add-rental-location"
-import AddVehicle from "./components/admin/add-vehicle"
+import AddVehicle from "./components/admin/add-vehicle";
+import UpdateMembership from "./components/admin/update-membership";
 
 const App = () => (
   <Router>
@@ -19,9 +20,10 @@ const App = () => (
       <Route path="/user/vehicles" component={Vehicles} />
       <Route path="/user/vehicle/:id" component={VehicleDetails} />
       <Route path="/user/profile" component={Profile} />
-      <Route path="/admin" component={Admin} />
-      <Route path="/admin/addLocation" component={AddLoaction} />
-      <Route path="/admin/addVehicle" component={AddVehicle} />
+      <Route exact path="/admin" component={Admin} />
+      <Route exact path="/admin/addLocation" component={AddLoaction} />
+      <Route exact path="/admin/addVehicle" component={AddVehicle} />
+      <Route exact path="/admin/membershipUpdate" component={UpdateMembership} />
     </Switch>
   </Router>
 )
