@@ -10,4 +10,7 @@ module.exports = (app) => {
 
    //For Admin to retrieve all vehicles in the system and retrieve all unreserved Vehicles which satisfy the search criteria
    app.get("/vehicles", vehicles.findVehicles)
+
+    //Update vehicle by vehicleUuid
+    app.put("/vehicles/:vehicleUuid", vehicles.updateVehicle)
 }
