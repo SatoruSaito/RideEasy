@@ -15,6 +15,7 @@ import {
   MDBNavbarNav,
 } from "mdbreact"
 import logo from "../../images/rideeasy.png"
+import cognitoUtils from "../../utils/cognitoUtils.js"
 
 const MembersList = () => {
   const [isSent, setIsSent] = useState(false)
@@ -25,6 +26,11 @@ const MembersList = () => {
     fetch(`${APIS.terminateMembership}/${membershipId}`, { method: "PATCH" })
       .then(() => setIsSent(true))
       .catch(() => alert("There was an error, please try again"))
+  }
+
+  const onSignOut = (e) => {
+    e.preventDefault()
+    cognitoUtils.signOutCognitoSession()
   }
 
   const columns = [
@@ -65,7 +71,7 @@ const MembersList = () => {
       }
 
       if (user.status === "ACTIVE" || user.status === "active") {
-         console.log("user",user.status)
+        console.log("user", user.status)
         rows = {
           ...rows,
           action: (
@@ -75,7 +81,7 @@ const MembersList = () => {
           ),
         }
       } else {
-         console.log("else",user.status)
+        console.log("else", user.status)
         rows = {
           ...rows,
           action: (
@@ -103,13 +109,20 @@ const MembersList = () => {
           </MDBNavbarBrand>
           <MDBCollapse navbar>
             <MDBNavbarNav right>
-  <MDBNavItem>
-  <MDBBtn color="indigo" href={"/admin"} mdbWavesEffect active>
-  Members List
-  </MDBBtn>
-  </MDBNavItem>
               <MDBNavItem>
                 <MDBBtn
+                  size="sm"
+                  color="indigo"
+                  href={"/admin"}
+                  mdbWavesEffect
+                  active
+                >
+                  Members List
+                </MDBBtn>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBBtn
+                  size="sm"
                   color="indigo"
                   href={"/admin/membershipUpdate"}
                   mdbWavesEffect
@@ -118,13 +131,28 @@ const MembersList = () => {
                 </MDBBtn>
               </MDBNavItem>
               <MDBNavItem>
-                <MDBBtn color="indigo" href={"/admin/addVehicle"} mdbWavesEffect>
+                <MDBBtn
+                  color="indigo"
+                  href={"/admin/addVehicle"}
+                  mdbWavesEffect
+                  size="sm"
+                >
                   Add Vehicle
                 </MDBBtn>
               </MDBNavItem>
               <MDBNavItem>
-                <MDBBtn color="indigo" href={"/admin/addLocation"} mdbWavesEffect>
+                <MDBBtn
+                  color="indigo"
+                  href={"/admin/addLocation"}
+                  mdbWavesEffect
+                  size="sm"
+                >
                   Add location
+                </MDBBtn>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBBtn size="sm" color="indigo" onClick={onSignOut} mdbWavesEffect>
+                  Log Out
                 </MDBBtn>
               </MDBNavItem>
             </MDBNavbarNav>

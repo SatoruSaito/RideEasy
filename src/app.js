@@ -1,31 +1,30 @@
 import React from "react"
-// import { useRoutes } from "hookrouter";
-import { Router, Route } from "react-router-dom"
-// import routes from "./router";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom"
+import ReactNotification from "react-notifications-component"
 import Home from "./components/home"
 import Profile from "./components/profile"
 import Vehicles from "./components/vehicles"
 import VehicleDetails from "./components/vehicle-details"
 import Callback from "./components/callback"
-
-// const App=() => {
-//   const routeResult = useRoutes(routes);
-//   console.log(routeResult);
-//   return routeResult;
-// }
-//  export default App;
-
-import { createBrowserHistory } from "history"
-
-const history = createBrowserHistory()
+import Admin from "./components/admin"
+import AddLoaction from "./components/admin/add-rental-location"
+import AddVehicle from "./components/admin/add-vehicle";
+import UpdateMembership from "./components/admin/update-membership";
 
 const App = () => (
-  <Router history={history}>
-    <Route exact path="/" component={Home} />
-    <Route exact path="/callback" component={Callback} />
-    <Route path="/user/vehicles" component={Vehicles} />
-    <Route path="/user/vehicle/:id" component={VehicleDetails} />
-    <Route path="/user/profile" component={Profile} />
+  <Router>
+    <ReactNotification />
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/callback" component={Callback} />
+      <Route path="/user/vehicles" component={Vehicles} />
+      <Route path="/user/vehicle/:id" component={VehicleDetails} />
+      <Route path="/user/profile" component={Profile} />
+      <Route exact path="/admin" component={Admin} />
+      <Route exact path="/admin/addLocation" component={AddLoaction} />
+      <Route exact path="/admin/addVehicle" component={AddVehicle} />
+      <Route exact path="/admin/membershipUpdate" component={UpdateMembership} />
+    </Switch>
   </Router>
 )
 
