@@ -7,7 +7,6 @@ AWSConfig.region = appConfig.region
 
 // Creates a CognitoAuth instance
 const createCognitoAuth = () => {
-  console.log("@appConfig", appConfig)
   const appWebDomain = appConfig.userPoolBaseUri
     .replace("https://", "")
     .replace("http://", "")
@@ -73,8 +72,8 @@ const getCognitoSession = () => {
       console.debug("Successfully got session: " + JSON.stringify(result))
 
       let isAdmin;
-      console.log("no",result.idToken.payload["cognito:groups"].includes("rental_admin"))
-      if (result.idToken.payload["cognito:groups"].includes("rental_admin")) {
+      console.log("no",result.idToken.payload["cognito:groups"])
+      if (result.idToken.payload["cognito:groups"] && result.idToken.payload["cognito:groups"].includes("rental_admin")) {
         isAdmin = true
       }else{
         isAdmin = false
