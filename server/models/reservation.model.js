@@ -9,8 +9,8 @@ const reservation = function(reservation) {
   this.user_uuid = reservation.user_uuid;
   //this.start_date = reservation.start_date.substring(0, 10) + " " + reservation.start_date.substring(11, 19);//because it is ISO string it is fixed
   //this.end_date = reservation.end_date.substring(0, 10) + " " + reservation.end_date.substring(11, 19);
-  this.start_date = moment(reservation.start_date).format('YYYY-MM-DD HH:mm:ss');
-  this.end_date = moment(reservation.end_date).format('YYYY-MM-DD HH:mm:ss')
+  this.start_date = moment.utc(reservation.start_date).format('YYYY-MM-DD HH:mm:ss');
+  this.end_date = moment.utc(reservation.end_date).format('YYYY-MM-DD HH:mm:ss')
   this.is_car_returned = false;
   this.is_pickedUp = false;
 
@@ -52,31 +52,32 @@ reservation.create = (newReservation, result) => {
 reservation.removebyUuid = (uuid, result) => {
   var vehicle_uuid;
   var cancellation_fee;
-  var sql_qry_string = "select vehicle_uuid from reservation where uuid = \'"+escape(uuid)+"'";
-  console.log(sql_qry_string);
-  sql.query(sql_qry_string,(err, res) => {
-    if(err){
-      console.log("error: ", err);
+  //var sql_qry_string = "select vehicle_uuid from reservation where uuid = \'"+escape(uuid)+"'";
+  //console.log(sql_qry_string);
+  //sql.query(sql_qry_string,(err, res) => {
+  //  if(err){
+  //    console.log("error: ", err);
 
-      return;
-    }
-    console.log("vehicle_uuid from reservation");
-    console.log(res);
-    console.log("vehicle_uuid = " + res[0].vehicle_uuid);
-    vehicle_uuid = res[0].vehicle_uuid;
-    console.log("vehicle uuid" + vehicle_uuid);
-    var qry_str ="DELETE  FROM reservation WHERE uuid = \'" + escape(uuid) + "'"+"AND TIMEDIFF(start_date,NOW()) >= '01:00:00'";
-    console.log("querystring" +qry_str);
+   //   return;
+   // }
+//    console.log("vehicle_uuid from reservation");
+//    console.log(res);
+//    console.log("vehicle_uuid = " + res[0].vehicle_uuid);
+//    vehicle_uuid = res[0].vehicle_uuid;
+//    console.log("vehicle uuid" + vehicle_uuid);
+    var current_time = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+    console.log("current time " + current_time);
+    var qry_str =`DELETE FROM reservation WHERE uuid = '${escape(uuid)}' AND TIMEDIFF(start_date, '` + current_time + `') >= '01:00:00'`;
+    console.log("querystring " + qry_str);
     sql.query(qry_str, uuid, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      console.log("reservation id",uuid);
-      result(null, err);
+      if (err) {
+        console.log("error: ", err);
+        console.log("reservation id ",uuid);
+        result(null, err);
+        return;
+      }
 
-      return;
-
-    }
-
+    console.log(JSON.stringify(res));
     if (res.affectedRows == 0) {
       // not found reservation with the id
       //result({ kind: "not_found" }, null);
@@ -87,64 +88,56 @@ reservation.removebyUuid = (uuid, result) => {
       sql.query(querystring,(err, res) => {
         if(err){
           console.log("error: ", err);
-
+          result(null,res);
           return;
         }
+        
         console.log("cancellation fee calculated");
         console.log("cancellation fee =" +res[0].cancellation_fee);
         //console.log("vehicle_type_uuid" + res[1].vehicletype);
         cancellation_fee = res[0].cancellation_fee;
-        var query ="DELETE  FROM reservation WHERE uuid = \'"+escape(uuid)+"'";
+        //var query ="DELETE  FROM reservation WHERE uuid = \'"+escape(uuid)+"'";
+        var query = "select * from reservation";
         sql.query(query,(err, res) => {
           if(err){
             console.log("error: ", err);
 
             return;
           }
-          console.log("reservation got cancelled with cancellation fee =" +cancellation_fee);
-          console.log("res"+res);
-          result(null,res);
-          /*var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
-          console.log("querystring = " + qrystring);
-          sql.query(qrystring,(err, res) => {
-          if(err){
-          console.log("error: ", err);
+          console.log("reservation got cancelled with cancellation fee = " +cancellation_fee);
+          console.log("res "+res);
+          result(null, res);
+//          var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
+//          console.log("querystring = " + qrystring);
+          // sql.query(qrystring,(err, res) => {
+            // if(err){
+            //   console.log("error: ", err);
 
-          return;
-      }
+            //   return;
+            // }
+          // });
 
-      console.log("vehicle table updated");
+        });
 
-
-    });*/
-
-  });
-
-});
+      });
       return;
-  }
+    }
 
     console.log("deleted reservation record with reservation id: ", uuid);
     result(null, res);
     console.log(res);
-    /*var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
-    console.log("querystring = " + qrystring);
-    sql.query(qrystring,(err, res) => {
-      if(err){
-        console.log("error: ", err);
+    //var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
+    //console.log("querystring = " + qrystring);
+    //sql.query(qrystring,(err, res) => {
+        //if(err){
+          //console.log("error: ", err);
+          //return;
+        //}
+        //console.log("vehicle table updated");
+      //});
+    });
 
-        return;
-      }
-      console.log("vehicle table updated");
-
-
-    }
-   );*/
-  });
-
-  });
-
-
+  //});
 };
 
 
@@ -199,7 +192,7 @@ reservation.updateispickedup = (uuid, result) => {
     return;
   }
 
-  console.log("updated price_range_table: ", { id: uuid, ...reservation });
+  console.log("updated reservation: ", { id: uuid, ...reservation });
   result(null, { id: uuid, ...reservation });
     var qrystring = "update  location l inner join  vehicle v on l.uuid = v.location_uuid inner join reservation r on v.uuid = r.vehicle_uuid set l.number_of_vehicles =l.number_of_vehicles-1 where r.is_pickedUp = true and l.uuid = v.location_uuid;";
           console.log("querystring = " + qrystring);
