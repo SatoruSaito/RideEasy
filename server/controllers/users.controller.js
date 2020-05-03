@@ -106,7 +106,11 @@ exports.updateMembershipByUserUuid = (req, res) => {
 //For user to update his profile details including driver's license and credit card number
 
 exports.updateProfileByUserUuid = (req, res) => {
-  User.putProfile(req.params.userUuid, new User(req.body), (err, data) => {
+  let membership_status = 'ACTIVE';
+  if(req.query && req.query.registration_flow && req.query.registration_flow === 'true')
+    membership_status = 'PENDING';
+
+  User.putProfile(req.params.userUuid, new User(req.body),membership_status, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
