@@ -92,3 +92,24 @@ exports.findVehicleByUuid = (req, res) => {
     } else res.send(data)
   })
 }
+
+exports.updateVehicle = (req,res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: "Vehicle body to be updated can not be empty!"
+    })
+  }
+  Vehicle.updateVehicle(req.params.vehicleUuid, req.body, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Vehicle with uuid ${req.params.vehicleUuid}.`
+        })
+      } else {
+        res.status(500).send({
+          message: "Error updating Vehicle with uuid " + req.params.vehicleUuid
+        })
+      }
+    } else res.send(data)
+  })
+}
