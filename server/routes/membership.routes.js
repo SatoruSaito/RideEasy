@@ -5,7 +5,7 @@ module.exports = (app) => {
   app.post("/membership", membership.create)
 
   // For the admin to see all members, if user uuid is provided show details for that user only
-  app.get("/membership?:userUuid", membership.findAllByUserUuid)
+  app.get("/membership", membership.findAllByUserUuid)
 
   // For the admin to terminate membership
   app.patch("/membership/:membershipUuid", membership.updateOne)

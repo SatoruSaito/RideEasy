@@ -26,3 +26,15 @@ exports.create = (req, res) => {
     });
 };
 
+// Retrieve all policies from the database
+exports.findAll = (req, res) => {
+    Policy.getAll((err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Error occurred while retrieving policies."
+            });
+        else res.send(data);
+    });
+};
+

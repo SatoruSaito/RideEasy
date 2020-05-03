@@ -68,6 +68,8 @@ exports.returnVehicle =(req,res) => {
         });
       }
     } else {
+      if(data.changedRows == 0)
+        return res.send({message:"Vehicle has been previously returned"});
       reservation.increaseVehicleCount(req.body.vehicle_uuid,(err,data) =>{
         if (err) {
           if (err.kind === "not_found") {
@@ -80,14 +82,17 @@ exports.returnVehicle =(req,res) => {
             });
           }
         }else{
-          res.send(data);
+          reservation.calculateCharges(req.body.vehicle_uuid ,req.body.start_date, req.body.end_date,(err,reservation_charges) =>{
+            res.send(reservation_charges);
+          });
+
         }
       })
     }
   });
 };
 
-//Update is_pickeUp in reservation table when user clicks pick up 
+//Update is_pickeUp in reservation table when user clicks pick up
 //and also decrement the count of nor of vehicles in location table
 
 exports.updateispickedup = (req, res) => {
