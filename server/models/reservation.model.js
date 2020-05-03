@@ -52,7 +52,7 @@ reservation.create = (newReservation, result) => {
 //in vehicle table else calculate the one hr price to charge on user and cancel reservation
 reservation.removebyUuid = (uuid, result) => {
   var vehicle_uuid;
-  var cancellation_fee;
+  var cancellation_fee = 0;
   //var sql_qry_string = "select vehicle_uuid from reservation where uuid = \'"+escape(uuid)+"'";
   //console.log(sql_qry_string);
   //sql.query(sql_qry_string,(err, res) => {
@@ -97,8 +97,8 @@ reservation.removebyUuid = (uuid, result) => {
         console.log("cancellation fee =" +res[0].cancellation_fee);
         //console.log("vehicle_type_uuid" + res[1].vehicletype);
         cancellation_fee = res[0].cancellation_fee;
-        //var query ="DELETE  FROM reservation WHERE uuid = \'"+escape(uuid)+"'";
-        var query = "select * from reservation";
+        var query ="DELETE  FROM reservation WHERE uuid = \'"+escape(uuid)+"'";
+        //var query = "select * from reservation";
         sql.query(query,(err, res) => {
           if(err){
             console.log("error: ", err);
@@ -107,7 +107,7 @@ reservation.removebyUuid = (uuid, result) => {
           }
           console.log("reservation got cancelled with cancellation fee = " +cancellation_fee);
           console.log("res "+res);
-          result(null, res);
+          result(null,  {"cancellation_fee" : cancellation_fee});
 //          var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
 //          console.log("querystring = " + qrystring);
           // sql.query(qrystring,(err, res) => {
@@ -125,7 +125,7 @@ reservation.removebyUuid = (uuid, result) => {
     }
 
     console.log("deleted reservation record with reservation id: ", uuid);
-    result(null, res);
+    result(null, {"cancellation_fee" : cancellation_fee});
     console.log(res);
     //var qrystring = "UPDATE vehicle SET is_reserved = false WHERE uuid = \'"+ escape(vehicle_uuid) + "'";
     //console.log("querystring = " + qrystring);

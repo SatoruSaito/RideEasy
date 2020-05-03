@@ -39,7 +39,7 @@ exports.create = (req, res) => {
  //Cancel reservation with user uuid and also check that cancel reservation should be successful only when the
   //user tries to cancel reservation 1 hr prior to start time otherwise need to charge 1 hr price
   exports.delete = (req, res) => {
-    reservation.removebyUuid(req.params.uuid, (err, data) => {
+    reservation.removebyUuid(req.params.uuid, (err, result) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
@@ -50,7 +50,7 @@ exports.create = (req, res) => {
             message: "Could not delete reservation with id " + req.params.uuid
           });
         }
-      } else res.send({ message: `reservation  was cancelled successfully!` });
+      } else res.send(result);
     });
   };
 
