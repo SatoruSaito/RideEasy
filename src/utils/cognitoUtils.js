@@ -1,7 +1,7 @@
 import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth"
 import { CognitoUserPool } from "amazon-cognito-identity-js"
 import { config as AWSConfig } from "aws-sdk"
-import appConfig from "../config/app-config.json"
+import { appConfig } from "../config/app-config"
 
 AWSConfig.region = appConfig.region
 
@@ -36,7 +36,7 @@ const createCognitoUserPool = () =>
 
 // Get the URI of the hosted sign in screen
 const getCognitoSignInUri = () => {
-   const signinUri = `${appConfig.userPoolBaseUri}/login?response_type=token&client_id=${appConfig.clientId}&redirect_uri=${appConfig.callbackUri}`
+  const signinUri = `${appConfig.userPoolBaseUri}/login?response_type=token&client_id=${appConfig.clientId}&redirect_uri=${appConfig.callbackUri}`
   return signinUri
 }
 
@@ -71,12 +71,14 @@ const getCognitoSession = () => {
       // Resolve the promise with the session credentials
       console.debug("Successfully got session: " + JSON.stringify(result))
 
-      let isAdmin = false
-      console.log("@group", result)
-      console.log("groups: " + result.idToken.payload["cognito:groups"])
-      if (result.idToken.payload["cognito:groups"] == "rental-admin") {
+      let isAdmin;
+      console.log("no",result.idToken.payload["cognito:groups"])
+      if (result.idToken.payload["cognito:groups"] && result.idToken.payload["cognito:groups"].includes("rental_admin")) {
         isAdmin = true
+      }else{
+        isAdmin = false
       }
+
       const session = {
         credentials: {
           accessToken: result.accessToken.jwtToken,
@@ -89,6 +91,7 @@ const getCognitoSession = () => {
           firstName: result.idToken.payload.given_name,
           lastName: result.idToken.payload.family_name,
           isAdmin: isAdmin,
+          userId: result.idToken.payload.sub,
         },
       }
       resolve(session)
