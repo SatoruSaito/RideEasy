@@ -1,4 +1,5 @@
 const sql = require("./db.js")
+const moment = require('moment');
 
 // constructor
 const User = function(user) {
@@ -79,17 +80,22 @@ User.getMembershipByUserUuid = (userUuid, result) => {
 
 // Update membership by user uuid
 User.putMembership = (userUuid, Membership, result) => {
-  var current_end_date = new Date(Membership.end_date)
-  var extended_date = new Date(
-    current_end_date.setMonth(current_end_date.getMonth() + 6)
-  )
-  console.log("extended end date: " + extended_date)
-  Membership.end_date = extended_date
-  console.log("updated membership end date: " + Membership.end_date)
+    let updateQuery = null;
+    let updateValues = [];
+    if(Membership.status.toUpperCase() === 'INACTIVE') {
+        updateQuery = `UPDATE membership SET status = ? WHERE user_uuid = ?`;
+        updateValues.push('INACTIVE',userUuid);
+    }
+    else {
+        Membership.end_date = moment.utc(Membership.end_date).add(6,"month").format('YYYY-MM-DD HH:mm:ss');
+        Membership.start_date = moment.utc(Membership.start_date).format('YYYY-MM-DD HH:mm:ss');
+        updateQuery = `UPDATE membership SET start_date = ?, end_date = ?, status = ? WHERE user_uuid = ?`;
+        updateValues.push(Membership.start_date, Membership.end_date,'ACTIVE',userUuid);
+    }
 
   sql.query(
-    "UPDATE membership SET start_date = ?, end_date = ?, status = ? WHERE user_uuid = ?",
-    [Membership.start_date, Membership.end_date, Membership.status, userUuid],
+    updateQuery,
+    updateValues,
     (err, res) => {
       if (err) {
         console.log("error: ", err)
