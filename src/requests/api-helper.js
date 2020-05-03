@@ -12,7 +12,7 @@ export const APIS = {
   userStatus: (userId) => `${BASE_URL}/users/${userId}/membership`,
   userDetails: (userId, userStatus) =>
     userStatus === "INCOMPLETE"
-      ? `${BASE_URL}/users/${userId}?registration_flow = true`
+      ? `${BASE_URL}/users/${userId}?registration_flow=true`
       : `${BASE_URL}/users/${userId}`,
   getReservation: (userId) => `${BASE_URL}/users/${userId}/reservations`,
   deleteReservation: (reservationId) => `${BASE_URL}/reservations/${reservationId}`,
