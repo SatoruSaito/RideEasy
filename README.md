@@ -188,7 +188,7 @@ CREATE TABLE `policy` (
   `is_expired` boolean NOT NULL DEFAULT false,
    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-PRIMARY KEY (`uuid`)\
+PRIMARY KEY (`uuid`)
 )
 	ALTER TABLE reservation ADD COLUMN is_pickedUp boolean
 ---
