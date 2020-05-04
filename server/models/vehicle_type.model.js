@@ -1,4 +1,5 @@
 const sql = require("./db.js");
+const moment = require('moment');
 
 // constructor
 const VehicleType = function(vehicle_type) {
@@ -55,6 +56,30 @@ VehicleType.getPriceRangeByVehicleType = (vehicleTypeUuid, result) => {
       }
     )
   }
+  
+  //Calculate the price by vehicle price_range by vehicle_type 
+  VehicleType.getPricebyVehicleType = (vehicle_type_uuid, start_date, end_date,total_price) => {
+    let diff_ms = moment(end_date).diff(moment(start_date));
+    let totalHours = moment.duration(diff_ms).asHours();
+    console.log("totalhours = " + totalHours);
+    var qrystring = `SELECT price from vehicle_price_range vpr where vpr.min_hours <= ${totalHours} and vpr.max_hours >= ${totalHours} and vpr.vehicle_type_uuid = \'${vehicle_type_uuid}\';`;
+    console.log("qrystring" + qrystring)
+      sql.query(qrystring, (err, res) => {
+        if (err) {
+          console.log("error: ", err);
+          result(null, err);
+          return;
+        }
+        //let totalprice = res[0].price;
+        //total_price(null, {"total_price":totalprice});
+        total_price(null,res);
+        return;
+      }
+    );
+  }
+  
+    
+  
   
 
   

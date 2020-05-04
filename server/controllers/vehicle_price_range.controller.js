@@ -84,3 +84,4 @@ exports.delete = (req, res) => {
     } else res.send({ message: `record was deleted successfully!` });
 });
 };
+

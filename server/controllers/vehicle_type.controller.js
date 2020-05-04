@@ -55,4 +55,21 @@ exports.findPricerangebyVehicleType = (req, res) => {
       } else res.send(data)
     })
   }
+
+  //calculate price by vehicle type based on the start date and end date given by the user
+  exports.calculatePricebyVehicleType = (req, res) => {
+    VehicleType.getPricebyVehicleType(req.params.uuid,req.query.start_date,req.query.end_date, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Vehicle type with the u uuid ${req.params.uuid} not found.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving vehicle typewith uuid " + req.params.uuid
+          });
+        }
+      } else res.send(data);
+    });
+  };
   

@@ -13,4 +13,5 @@ module.exports = (app) => {
 
     //Update vehicle by vehicleUuid
     app.put("/vehicles/:vehicleUuid", vehicles.updateVehicle)
+    
 }
