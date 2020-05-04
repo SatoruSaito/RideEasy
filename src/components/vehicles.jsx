@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { APIS } from "../requests/api-helper.js"
 import useFetch from "../hooks/hooks"
-import DatePicker from "react-datetime-picker"
+import ReactDatePicker from "react-datepicker";
+import { useForm, ErrorMessage, Controller } from "react-hook-form"
+import { addDays } from 'date-fns';
+import cognitoUtils from "../utils/cognitoUtils"
 import {
   MDBBtn,
   MDBCard,
@@ -23,11 +26,14 @@ import {
 import "../css/vehicles.css"
 import logo from "../images/rideeasy.png"
 import { makeStyles } from "@material-ui/core/styles"
+import "react-datepicker/dist/react-datepicker.css";
 
 const Vehicles = () => {
   const [vehicles, setVehicles] = useState([])
   const [vehicleTypes, setVehicleTypes] = useState([])
   const [locations, setLocations] = useState([])
+  const [startDate, setStartDate] = useState([])
+  const [endDate, setEndDate] = useState([])
 
   useEffect(() => {
     onLoad()
@@ -37,30 +43,44 @@ const Vehicles = () => {
     const vehicleTypesRes = await fetch(APIS.vehicleTypes, {})
     const vehicleTypes = await vehicleTypesRes.json()
     setVehicleTypes(vehicleTypes)
-    console.log("vehicleTypes", vehicleTypes)
 
     const vehicles = await fetch(APIS.vehicles, {})
     const vehiclesRes = await vehicles.json()
-    console.log("vehicles", vehiclesRes)
     setVehicles(vehiclesRes)
 
     const locationsRes = await fetch(APIS.locations, {})
     const locations = await locationsRes.json()
     setLocations(locations)
-    console.log("loactions", locations)
   }
 
   const [location, setLocation] = useState("")
   const [vehicleType, setVehicleType] = useState("")
 
   const handleChangeLocation = (event) => {
-    console.log("location", event.target.value)
     setLocation(event.target.value)
   }
   const handleChangeCarType = (event) => {
-    console.log("type", event.target.value)
     setVehicleType(event.target.value)
   }
+
+  const { handleSubmit, control, errors, register } = useForm({
+    mode: "onChanges",
+    reValidateMode: "onChange"
+  });
+
+  const onSubmit = async (form) => {
+    const start_date = new Date(form.reservation_start_time).toISOString();
+    const end_date = new Date(form.reservation_end_time).toISOString()
+    const vehicles= await fetch(`${APIS.vehicles}?vehicle_type_uuid=${form.vehicle_type_uuid}&location_uuid=${form.location_uuid}&reservation_start_time=${start_date}&reservation_end_time=${end_date}`, {})
+    const vehiclesRes = await vehicles.json()
+    setVehicles(vehiclesRes)
+  }
+
+  const onSignOut = (e) => {
+    e.preventDefault()
+    cognitoUtils.signOutCognitoSession()
+  }
+
 
   return (
     <div>
@@ -78,52 +98,126 @@ const Vehicles = () => {
           </MDBNavbarBrand>
           <MDBCollapse navbar>
             <MDBNavbarNav right>
-              <MDBFormInline className="md-form mr-auto m-0">
-                <select
-                  className="browser-default custom-select mr-auto ml-5"
-                  onChange={handleChangeLocation}
-                >
-                  <option disable>Locations</option>
-                  {locations &&
-                    locations.map((location) => (
-                      <option value={location.uuid}>{location.name}</option>
-                    ))}
-                </select>
-                <select
-                  className="browser-default custom-select mr-auto ml-5"
-                  onChange={handleChangeCarType}
-                >
-                  <option>Car Types</option>
-                  {vehicleTypes &&
-                    vehicleTypes.map((type) => (
-                      <option value={type.uuid}>{type.type}</option>
-                    ))}
-                </select>
-
+              <MDBNavItem>
                 <MDBBtn
-                  outline
-                  color="white"
                   size="sm"
-                  type="submit"
-                  className="mr-auto"
+                  color="indigo"
+                  href={"/user/profile"}
+                  mdbWavesEffect
                 >
-                  Search
+                  Profile
                 </MDBBtn>
-              </MDBFormInline>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBBtn size="sm" color="indigo" onClick={onSignOut} mdbWavesEffect>
+                  Log Out
+                </MDBBtn>
+              </MDBNavItem>
+
             </MDBNavbarNav>
           </MDBCollapse>
         </MDBContainer>
       </MDBNavbar>
       <MDBView>
+        <div class="container mt-10">
+          <form class="form-inline border border-info ml-10" onSubmit={handleSubmit(onSubmit)}>
+            <div class="input-group mb-2 mr-sm-2">
+              <select
+                ref={register({ required: true })}
+                name="location_uuid"
+                className="custom-select"
+                onChange={handleChangeLocation}
+              >
+                <option value="">Locations</option>
+                {locations &&
+                  locations.map((location) => (
+                    <option value={location.uuid}>{location.name}</option>
+                  ))}
+              </select>
+            </div>
+            <div class="input-group mb-2 mr-sm-2">
+              <select
+                ref={register}
+                name="vehicle_type_uuid"
+                className="custom-select"
+                onChange={handleChangeCarType}
+              >
+                <option value="">Vehicle Types</option>
+                {vehicleTypes &&
+                  vehicleTypes.map((type) => (
+                    <option value={type.uuid}>{type.type}</option>
+                  ))}
+              </select>
+            </div>
+            <div class="input-group mb-2 mr-sm-2">
+              <Controller
+                as={
+                  <ReactDatePicker
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    todayButton="Today"
+                    dropdownMode="select"
+                    isClearable
+                    placeholderText="Click to select  start time"
+                    shouldCloseOnSelect
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    minDate={new Date()}
+                    onChange={date => setStartDate(date)}
+                  />
+                }
+                control={control}
+                register={register({ required: true })}
+                name="reservation_start_time"
+                valueName="selected" // DateSelect value's name is selected
+                onChange={([selected]) => {
+                  console.log("selected",selected)
+                  setStartDate(selected)
+                  return selected;
+                }}
+                rules={{
+                  required: true
+                }}
+              />
+            </div>
+            <div class="input-group mb-2 mr-sm-2">
+              <Controller
+                as={
+                  <ReactDatePicker
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    todayButton="Today"
+                    dropdownMode="select"
+                    isClearable
+                    placeholderText="Click to select time"
+                    shouldCloseOnSelect
+                    showTimeSelect
+                    minDate={startDate}
+                    maxDate={addDays(startDate, 3)}
+                  />
+                }
+                control={control}
+                register={register({ required: true })}
+                name="reservation_end_time"
+                valueName="selected" // DateSelect value's name is selected
+                onChange={([selected]) => {
+                  return selected;
+                }}
+                rules={{
+                  required: true
+                }}
+              />
+            </div>
+            <div class="input-group mb-2 mr-sm-2">
+              <MDBBtn color="info" size="sm" type="submit" className="mr-auto">
+                Search
+              </MDBBtn>
+            </div>
+          </form>
+        </div>
         <ul class="vehicle-wrapper margin-top-50">
           {vehicles &&
             vehicles.map((vehicle) => (
               <MDBCol style={{ maxWidth: "22rem", minWidth: "13em" }}>
                 <MDBCard class="padding-20">
-                  {/*<MDBBadge color="amber" class="badge">*/}
-                  {/*<MDBIcon icon={vehicle.type.toLowerCase()} />*/}
-                  {/*{vehicle.type}*/}
-                  {/*</MDBBadge>*/}
                   <MDBCardBody>
                     <MDBCardTitle class="margin-top-15">
                       {vehicle.model}
