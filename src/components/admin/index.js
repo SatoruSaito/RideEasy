@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, Fragment } from "react"
 import MaterialTable from "material-table"
 import { APIS } from "../../requests/api-helper.js"
 import useFetch from "../../hooks/hooks"
@@ -23,7 +23,7 @@ const MembersList = () => {
   console.log("@res", res)
 
   const handleAction = (membershipId) => {
-    fetch(`${APIS.terminateMembership}/${membershipId}`, { method: "PATCH" })
+    fetch(APIS.terminateMembership(membershipId), { method: "PATCH" })
       .then(() => setIsSent(true))
       .catch(() => alert("There was an error, please try again"))
   }
@@ -70,23 +70,39 @@ const MembersList = () => {
         endDate: user.end_date,
       }
 
+
       if (user.status === "ACTIVE" || user.status === "active") {
         console.log("user", user.status)
         rows = {
           ...rows,
           action: (
             <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
-              Terminate
+              Deny
             </MDBBtn>
           ),
         }
-      } else {
+      } else if (user.status === "PENDING" || user.status === "pending"){
+        rows = {
+          ...rows,
+          action: (
+            <Fragment>
+          <MDBBtn color="green" size="sm" onClick={() => handleAction(user.uuid)}>
+            Approve
+          </MDBBtn>
+            <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
+              Deny
+            </MDBBtn>
+              </Fragment>
+          ),
+        }
+      }
+      else {
         console.log("else", user.status)
         rows = {
           ...rows,
           action: (
             <MDBBtn color="green" size="sm" onClick={() => handleAction(user.uuid)}>
-              Aprove
+              Approve
             </MDBBtn>
           ),
         }

@@ -5,7 +5,7 @@ export const APIS = {
   addVehicles: `${BASE_URL}/addvehicle`,
   reserveACar: `${BASE_URL}/reservations`,
   membersList: `${BASE_URL}/membership`,
-  terminateMembership: (userId) => `${BASE_URL}/users/${userId}/membership`,
+  terminateMembership: (membershipId) => `${BASE_URL}/membership/${membershipId}`,
   addLocation: `${BASE_URL}/locations`,
   locations: `${BASE_URL}/locations`,
   vehicleTypes: `${BASE_URL}/vehicle_type`,
