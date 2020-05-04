@@ -38,8 +38,8 @@ Vehicle.getBySearchCriteria = (
   reservation_end_time,
   result
 ) => {
-  reservation_start_time = Date.parse(reservation_start_time);
-  reservation_end_time = Date.parse(reservation_end_time);
+  reservation_start_time = moment(reservation_start_time).utc().format('YYYY-MM-DD HH:mm:ss');
+  reservation_end_time = moment(reservation_end_time).utc().format('YYYY-MM-DD HH:mm:ss');
   console.log("inside getBySearchCriteria");
   query =     `SELECT V.uuid FROM 
   vehicle V WHERE V.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\' AND
