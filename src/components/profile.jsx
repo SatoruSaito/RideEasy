@@ -75,6 +75,10 @@ const Profile = (props) => {
       (await fetch(APIS.vehicleDetails(reservationRes.vehicle_uuid), {}))
     const vehicleDetailsRes = await vehicleDetails.json()
     setVehicleInfo(vehicleDetailsRes)
+
+    const currentMembershipPrice = await fetch(APIS.policy,{})
+    const policy = await currentMembershipPrice.json()
+    console.log("policy",policy);
   }
 
   const { register, handleSubmit, watch, errors } = useForm()
@@ -468,6 +472,24 @@ const Profile = (props) => {
 
                 <div class="form-group row">
                   <label class="col-sm-5">Credit Card Number</label>
+                  <div class="col-sm-7">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Credit card number"
+                      ref={register}
+                      name="credit_card_number"
+                      defaultValue={
+                        userInfo.credit_card_number
+                          ? userInfo.credit_card_number
+                          : ""
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-5">Current Membership Price</label>
                   <div class="col-sm-7">
                     <input
                       type="text"

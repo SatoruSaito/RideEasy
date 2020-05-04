@@ -17,4 +17,5 @@ export const APIS = {
   getReservation: (userId) => `${BASE_URL}/users/${userId}/reservations`,
   deleteReservation: (reservationId) => `${BASE_URL}/reservations/${reservationId}`,
   pickupVehicle: (reservationId) => `${BASE_URL}/reservations/${reservationId}`,
+  policy: `${BASE_URL}/policy`
 }
