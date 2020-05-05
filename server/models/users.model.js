@@ -139,12 +139,12 @@ User.putMembership = (userUuid, Membership, result) => {
 
 // Update user profile with details like credit card, drivers license etc
 User.putProfile = (userUuid, User, membership_status, result) => {
+  console.log("UPDATING USER PROFILE WITH ",JSON.stringify(User));
   sql.query(
-    "UPDATE user SET first_name = ?, last_name = ?, user_name = ?, driver_license_number = ?, license_state =?, email_address =?, address =?, credit_card_number =? WHERE uuid = ?",
+    "UPDATE user SET first_name = ?, last_name = ?, driver_license_number = ?, license_state =?, email_address =?, address =?, credit_card_number =? WHERE uuid = ?",
     [
       User.first_name,
       User.last_name,
-      User.user_name,
       User.driver_license_number,
       User.license_state,
       User.email_address,
