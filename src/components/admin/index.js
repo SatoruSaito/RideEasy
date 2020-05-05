@@ -16,6 +16,7 @@ import {
 } from "mdbreact"
 import logo from "../../images/rideeasy.png"
 import cognitoUtils from "../../utils/cognitoUtils.js"
+import moment from "moment"
 
 const MembersList = () => {
   const [isSent, setIsSent] = useState(false)
@@ -28,6 +29,24 @@ const MembersList = () => {
       .catch(() => alert("There was an error, please try again"))
   }
 
+  const handleAdminApproval = (userId) => {
+    const payload = {
+      start_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
+      end_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
+      status : "ACTIVE"
+    }
+    const options = {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    const res =  fetch(APIS.updateUserMembershipByUserUuid(userId), options)
+      .then(() => setIsSent(true))
+      .catch(() => alert("There was an error, please try again"))
+  }
+
   const onSignOut = (e) => {
     e.preventDefault()
     cognitoUtils.signOutCognitoSession()
@@ -35,8 +54,8 @@ const MembersList = () => {
 
   const columns = [
     {
-      label: "User ID ",
-      field: "user_uuid",
+      label: "Full Name ",
+      field: "user_full_name",
       sort: "asc",
     },
     {
@@ -64,7 +83,7 @@ const MembersList = () => {
     res.response &&
     res.response.map((user) => {
       let rows = {
-        user_uuid: user.user_uuid,
+        user_full_name: user.first_name.concat(" ",user.last_name),
         status: user.status,
         startDate: user.start_date,
         endDate: user.end_date,
@@ -86,7 +105,7 @@ const MembersList = () => {
           ...rows,
           action: (
             <Fragment>
-          <MDBBtn color="green" size="sm" onClick={() => handleAction(user.uuid)}>
+          <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.user_uuid)}>
             Approve
           </MDBBtn>
             <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>

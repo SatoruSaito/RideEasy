@@ -10,6 +10,7 @@ export const APIS = {
   locations: `${BASE_URL}/locations`,
   vehicleTypes: `${BASE_URL}/vehicle_type`,
   userStatus: (userId) => `${BASE_URL}/users/${userId}/membership`,
+  updateUserMembershipByUserUuid: (userId) => `${BASE_URL}/users/${userId}/membership`,
   userDetails: (userId, userStatus) =>
     userStatus === "INCOMPLETE"
       ? `${BASE_URL}/users/${userId}?registration_flow=true`

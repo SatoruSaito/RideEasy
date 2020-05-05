@@ -42,7 +42,7 @@ Vehicle.getBySearchCriteria = (
     reservation_end_time = moment(reservation_end_time).utc().format('YYYY-MM-DD HH:mm:ss');
     let mytime1 = moment.utc().valueOf();
     let current_date_time = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
-    query = `SELECT v.uuid FROM vehicle v
+    query = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make, v.year, v.registration_number, v.current_mileage, v.last_serviced_date, v.vehicle_condition, v.next_available_time, v.location_uuid FROM vehicle v
     WHERE v.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\'
     and v.location_uuid = \'${escape(location_uuid)}\'
     and (v.uuid
@@ -72,7 +72,7 @@ Vehicle.getBySearchCriteria = (
             }
 
             if (!res.length) {
-                query = `SELECT v.uuid FROM vehicle v
+                query = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make, v.year, v.registration_number, v.current_mileage, v.last_serviced_date, v.vehicle_condition, v.next_available_time, v.location_uuid FROM vehicle v
     WHERE v.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\'
     and (v.uuid
     NOT IN (
