@@ -54,8 +54,8 @@ const MembersList = () => {
 
   const columns = [
     {
-      label: "User ID ",
-      field: "user_uuid",
+      label: "Full Name ",
+      field: "user_full_name",
       sort: "asc",
     },
     {
@@ -83,7 +83,7 @@ const MembersList = () => {
     res.response &&
     res.response.map((user) => {
       let rows = {
-        user_uuid: user.user_uuid,
+        user_full_name: user.first_name.concat(" ",user.last_name),
         status: user.status,
         startDate: user.start_date,
         endDate: user.end_date,

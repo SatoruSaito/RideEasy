@@ -25,33 +25,22 @@ Membership.create = (newMembership, result) => {
 // For the admin to see all members, if user uuid is provided show details for that user only
 
 Membership.getAllByUserUuid = (userUuid, result) => {
+  let query = null;
+  if (userUuid)
+    query = `SELECT * FROM membership m, user u WHERE u.uuid = m.user_uuid and u.uuid = \'${escape(userUuid)}\'`;
+  else
+    query = `SELECT * FROM membership m, user u where u.uuid = m.user_uuid`;
   sql.query(
-    `SELECT * FROM membership WHERE user_uuid = \'${escape(userUuid)}\'`,
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err)
-        result(null, err)
-        return
-      }
-
-      if (res.length) {
-        console.log("membership details for the given user: ", res)
+      query,
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err)
+          result(null, err)
+          return
+        }
+        console.log("membership details ", res)
         result(null, res)
-        return
-      } else {
-        sql.query(`SELECT * FROM membership`, (err, res) => {
-          if (err) {
-            console.log("error: ", err)
-            result(null, err)
-            return
-          }
-
-          console.log("membership details for all users: ", res)
-          result(null, res)
-        })
-      }
-    }
-  )
+      })
 }
 
 // For the admin to terminate membership
