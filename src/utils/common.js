@@ -48,3 +48,7 @@ export function setCookie(cname, cvalue, exdays, path) {
   let expires = "expires=" + d.toUTCString()
   document.cookie = cname + "=" + cvalue + ";" + expires + "; path=" + path + ";"
 }
+
+export default function formatDateToISO(date){
+return new Date(date).toISOString()
+}

@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from "react"
+import React, { Fragment, useState, useEffect } from "react"
 import { APIS } from "../requests/api-helper.js"
 import useFetch from "../hooks/hooks"
-import { store } from "react-notifications-component"
-
+import { store } from "react-notifications-component";
+import isEmpty from "lodash/isEmpty";
+import formatDateToISO from '../utils/common'
 import {
   MDBContainer,
   MDBBtn,
@@ -16,16 +17,39 @@ import {
   MDBCollapse,
   MDBNavbarNav,
 } from "mdbreact"
-import DatePicker from "react-datetime-picker"
 import { useForm } from "react-hook-form"
 import logo from "../images/rideeasy.png"
 import "../css/vehicles.css"
 
 const VehicleDetails = (props) => {
+
+  const [vehicle,setVehicle]= useState([]);
+  const [priceRange, setPriceRange] = useState([]);
+
+  const startDate = props.location.state.startDate;
+  const endDate = props.location.state.endDate;
   const vehicleId = props.match.params.id
-  const today = new Date()
-  const [isSent, setIsSent] = useState(false)
-  const data = useFetch(APIS.vehicleDetails(vehicleId), {})
+
+  useEffect(() => {
+    onLoad()
+  }, [])
+
+   async function onLoad(){
+    const res = await fetch(APIS.vehicleDetails(vehicleId), {})
+    const data = await res.json()
+    console.log("data", data);
+    setVehicle(data);
+    const vehicle_type_id = data  && data.vehicle_type_uuid
+    const ISOStartDate = formatDateToISO(startDate);
+    const ISOEndDate= formatDateToISO(endDate);
+    const pricerange =  await fetch(`${APIS.priceRange(vehicle_type_id)}?start_date=${ISOStartDate}&end_date=${ISOEndDate}`, {})
+
+    const pricerangeData = await pricerange.json()
+     console.log("pricerange",pricerangeData);
+     setPriceRange(pricerangeData);
+
+
+   }
 
   const handleReserveCar = async (e, startDate, endDate) => {
     e.preventDefault()
@@ -73,9 +97,7 @@ const VehicleDetails = (props) => {
       })
     }
   }
-
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+   console.log("vehicles",vehicle && vehicle)
 
   return (
     <div>
@@ -92,9 +114,14 @@ const VehicleDetails = (props) => {
           </MDBNavbarBrand>
           <MDBCollapse navbar>
             <MDBNavbarNav right>
-              <MDBNavItem active>
+              <MDBNavItem >
                 <MDBBtn color="indigo" href={"/user/profile"} mdbWavesEffect>
                   Profile
+                </MDBBtn>
+              </MDBNavItem>
+              <MDBNavItem >
+                <MDBBtn color="indigo" href={"/user/vehicles"} mdbWavesEffect>
+                  Vehicles
                 </MDBBtn>
               </MDBNavItem>
             </MDBNavbarNav>
@@ -116,7 +143,7 @@ const VehicleDetails = (props) => {
                         type="text"
                         readonly
                         class="form-control-plaintext"
-                        value={data.response && data.response.year}
+                        value={vehicle && vehicle.year}
                       />
                     </div>
                   </div>
@@ -128,8 +155,8 @@ const VehicleDetails = (props) => {
                         readonly
                         class="form-control-plaintext"
                         value={
-                          data.response &&
-                          `${data.response.model} (${data.response.make})`
+                          vehicle &&
+                          `${vehicle.model} (${vehicle.make})`
                         }
                       />
                     </div>
@@ -141,7 +168,7 @@ const VehicleDetails = (props) => {
                         type="text"
                         readonly
                         class="form-control-plaintext"
-                        value={data.response && data.response.current_mileage}
+                        value={vehicle && vehicle.current_mileage}
                       />
                     </div>
                   </div>
@@ -152,7 +179,7 @@ const VehicleDetails = (props) => {
                         type="text"
                         readonly
                         class="form-control-plaintext"
-                        value={data.response && data.response.vehicle_condition}
+                        value={vehicle && vehicle.vehicle_condition}
                       />
                     </div>
                   </div>
@@ -161,38 +188,37 @@ const VehicleDetails = (props) => {
             </MDBCard>
           </MDBCol>
           <MDBCol md="7">
-            <MDBCard>
+          <MDBCard>
               <MDBCardBody>
                 <form>
                   <p className="h4 text-center py-4 grey-text">Reserve A Car</p>
                   <div class="form-group row">
-                    <label class="col-sm-5">Start Date & Time</label>
-                    <div class="col-sm-7">
-                      <DatePicker
+                  <label class="col-sm-4 col-form-label">Start Date and Time</label>
+                    <div class="col-sm-8">
+                      <input
+                        type="text"
+                        readonly
+                        class="form-control-plaintext"
                         value={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        showTimeSelect
-                        format="yyyy-MM-dd hh:mm:ss"
-                        minDate={today}
                       />
                     </div>
                   </div>
 
                   <div class="form-group row">
-                    <label class="col-sm-5">End Date & Time</label>
-                    <div class="col-sm-7">
-                      <DatePicker
+                  <label class="col-sm-4 col-form-label">End Date and Time</label>
+                    <div class="col-sm-8">
+                      <input
+                        type="text"
+                        readonly
+                        class="form-control-plaintext"
                         value={endDate}
-                        onChange={(date) => setEndDate(date)}
-                        showTimeSelect
-                        format="yyyy-MM-dd hh:mm"
                       />
                     </div>
                   </div>
 
                   <div class="form-group row">
-                    <label class="col-sm-5">Price/hr</label>
-                    <div class="col-sm-7">$129 / hr</div>
+                    <label class="col-sm-5">Price </label>
+                    <div class="col-sm-7">{priceRange}</div>
                   </div>
                   <div className="text-center py-4 mt- o3">
                     <MDBBtn

@@ -6,6 +6,9 @@ import { useForm, ErrorMessage, Controller } from "react-hook-form"
 import { addDays } from 'date-fns';
 import cognitoUtils from "../utils/cognitoUtils"
 import {
+  Link
+} from "react-router-dom"
+import {
   MDBBtn,
   MDBCard,
   MDBCardBody,
@@ -32,8 +35,8 @@ const Vehicles = () => {
   const [vehicles, setVehicles] = useState([])
   const [vehicleTypes, setVehicleTypes] = useState([])
   const [locations, setLocations] = useState([])
-  const [startDate, setStartDate] = useState([])
-  const [endDate, setEndDate] = useState([])
+  const [startDate, setStartDate] = useState([''])
+  const [endDate, setEndDate] = useState([''])
 
   useEffect(() => {
     onLoad()
@@ -199,6 +202,7 @@ const Vehicles = () => {
                 name="reservation_end_time"
                 valueName="selected" // DateSelect value's name is selected
                 onChange={([selected]) => {
+                  setEndDate(selected)
                   return selected;
                 }}
                 rules={{
@@ -226,6 +230,13 @@ const Vehicles = () => {
                       <label>Make: </label>
                       {vehicle.make}
                     </MDBCardText>
+                    <Link to ={{
+                      pathname: `/user/vehicle/${vehicle.uuid}`,
+                      state: {
+                      startDate,
+                      endDate
+                    }
+                    }}>
                     <MDBBtn
                       href={`/user/vehicle/${vehicle.uuid}`}
                       outline
@@ -234,6 +245,7 @@ const Vehicles = () => {
                     >
                       Details
                     </MDBBtn>
+                      </Link>
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>

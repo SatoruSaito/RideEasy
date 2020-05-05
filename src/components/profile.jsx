@@ -44,7 +44,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 const Profile = (props) => {
   const [userInfo, setUserInfo] = useState({})
   const [membershipInfo, setMembershipInfo] = useState({})
-  const [reservationInfo, setReservationInfo] = useState({})
+  const [reservationInfo, setReservationInfo] = useState([])
   const [vehicleInfo, setVehicleInfo] = useState({})
 
   const userId = sessionStorage.getItem("userId")
@@ -77,8 +77,8 @@ const Profile = (props) => {
     setVehicleInfo(vehicleDetailsRes)
 
     const currentMembershipPrice = await fetch(APIS.policy,{})
-    const policy = await currentMembershipPrice.json()
-    console.log("policy",policy);
+    const policy = await currentMembershipPrice.json();
+    console.log("policy",currentMembershipPrice);
   }
 
   const { register, handleSubmit, watch, errors } = useForm()
@@ -252,7 +252,9 @@ const Profile = (props) => {
       >
         <Typography>Reservation</Typography>
       </ExpansionPanelSummary>
-      <MDBCard className="col-md-7 col-md-offset-2">
+
+        {reservationInfo.map((reservation) =>
+          <MDBCard className="col-md-7 col-md-offset-2">
         <MDBCardBody>
           <form>
             <p className="h4 text-center py-4 grey-text">Reservation Details</p>
@@ -311,7 +313,9 @@ const Profile = (props) => {
           </MDBBtn>
           }
         </MDBCardBody>
-      </MDBCard>
+          </MDBCard>
+        )}
+
     </ExpansionPanel>
   )
   console.log("reservationInfo",reservationInfo)
