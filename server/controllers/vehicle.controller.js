@@ -21,7 +21,6 @@ exports.create = (req, res) => {
     registration_number: req.body.registration_number,
     current_mileage: req.body.current_mileage,
     last_serviced_date: req.body.last_serviced_date,
-    is_reserved: req.body.is_reserved,
     vehicle_condition: req.body.vehicle_condition,
     next_available_time: req.body.next_available_time,
     location_uuid: req.body.location_uuid
@@ -108,6 +107,22 @@ exports.updateVehicle = (req,res) => {
       } else {
         res.status(500).send({
           message: "Error updating Vehicle with uuid " + req.params.vehicleUuid
+        })
+      }
+    } else res.send(data)
+  })
+}
+
+exports.deleteVehicle = (req,res) => {
+  Vehicle.deleteVehicle(req.params.vehicleUuid, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Vehicle with uuid ${req.params.vehicleUuid}.`
+        })
+      } else {
+        res.status(500).send({
+          message: "Error deleting Vehicle with uuid " + req.params.vehicleUuid
         })
       }
     } else res.send(data)

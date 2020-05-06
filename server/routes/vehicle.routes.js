@@ -13,5 +13,8 @@ module.exports = (app) => {
 
     //Update vehicle by vehicleUuid
     app.put("/vehicles/:vehicleUuid", vehicles.updateVehicle)
-    
+
+    //delete vehicle by vehicleUuid
+    app.delete("/vehicles/:vehicleUuid", vehicles.deleteVehicle)
+
 }

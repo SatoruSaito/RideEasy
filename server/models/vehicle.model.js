@@ -11,7 +11,6 @@ const Vehicle = function(vehicle) {
     this.registration_number = vehicle.registration_number
     this.current_mileage = vehicle.current_mileage
     this.last_serviced_date = moment(vehicle.last_serviced_date).utc().format('YYYY-MM-DD HH:mm:ss');
-    this.is_reserved = vehicle.is_reserved
     this.vehicle_condition = vehicle.vehicle_condition
     this.next_available_time = moment(vehicle.next_available_time).utc().format('YYYY-MM-DD HH:mm:ss');
     this.location_uuid = vehicle.location_uuid
@@ -150,6 +149,21 @@ Vehicle.getAllVehicles = (result) => {
 Vehicle.updateVehicle = (vehicle_uuid, vehicle, result) =>{
     sql.query(
         'UPDATE vehicle SET vehicle_type_uuid = ?, model = ?, make = ?, year = ?, registration_number = ?, current_mileage =?,last_serviced_date=?,vehicle_condition=?,next_available_time=?,location_uuid=? WHERE uuid =?',[vehicle.vehicle_type_uuid,vehicle.model,vehicle.make,vehicle.year,vehicle.registration_number,vehicle.current_mileage,vehicle.last_serviced_date,vehicle.vehicle_condition,vehicle.next_available_time,vehicle.location_uuid,escape(vehicle_uuid)],
+        (err, res) => {
+            if (err) {
+                console.log("error: ", err);
+                result(err, null)
+            } else {
+                console.log("Number_of_vehicles updated", res);
+                result(null, res)
+            }
+        }
+    )
+}
+
+Vehicle.deleteVehicle = (vehicle_uuid, result) =>{
+    sql.query(
+        'UPDATE vehicle SET is_deleted = ? WHERE uuid =?',[1,escape(vehicle_uuid)],
         (err, res) => {
             if (err) {
                 console.log("error: ", err);
