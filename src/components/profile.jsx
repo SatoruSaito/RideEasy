@@ -205,7 +205,7 @@ const Profile = (props) => {
     console.log("cancelation_fees",cancellation_fee)
     store.addNotification({
       title: "Cancelation fees",
-      message: `ancelation fees in  ${cancellation_fee} !!`,
+      message: `cancelation fee is ${cancellation_fee} !!`,
       showIcon: true,
       type: "success",
       insert: "bottom",
