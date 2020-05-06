@@ -52,7 +52,7 @@ const AddRentalLocation = () => {
    const reservedVehicles = vehicles.reduce((memo,vehicle) => {
      console.log("vehicle",vehicle)
       if(vehicle.reserved_vehicles && vehicle.reserved_vehicles.length >0) {
-        const filtered = _map(vehicle.reserved_vehicles, 'uuid')
+        const filtered = _map(vehicle.reserved_vehicles, 'location_uuid')
         memo = [...memo, ...filtered]
       }
       return memo
