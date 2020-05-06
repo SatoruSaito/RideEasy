@@ -82,7 +82,7 @@ Location.findVehiclesByLocationUuid = (location_uuid, result) => {
         }
 
         if (res.length) {
-            unreservedVehicles.push(res);
+            unreservedVehicles = [...res];
             console.log("queryUnreservedVehicles at location: ", res);
 
         }
@@ -95,7 +95,7 @@ Location.findVehiclesByLocationUuid = (location_uuid, result) => {
             }
 
             if (res.length) {
-                reservedVehicles.push(res);
+                reservedVehicles = [...res];
                 console.log("queryReservedVehicles at location: ", res);
             }
             result(null,{unreserved_vehicles:unreservedVehicles, reserved_vehicles:reservedVehicles})
