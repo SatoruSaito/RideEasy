@@ -60,6 +60,7 @@ const AddVehicle = () => {
     const data =
       vehicles &&
       vehicles.map(({uuid, current_mileage, registration_number, year, make, model}) => {
+        // is_deleted = 1
         let rows = {
           uuid, model, make , year, registration_number, current_mileage,
           action: (
@@ -116,7 +117,7 @@ const AddVehicle = () => {
       method: "DELETE"
     }
 
-     const deleteVehicle = fetch(APIS.deleteVehicle(id))
+     const deleteVehicle = fetch(APIS.deleteVehicle(id), options)
 
     deleteVehicle &&  store.addNotification({
       title: "Delete vehicle",

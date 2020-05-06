@@ -50,7 +50,7 @@ const Profile = (props) => {
   const [policy, setPolicy] = useState([])
 
   const userId = sessionStorage.getItem("userId")
-  const userStatus = sessionStorage.getItem("userStatus")
+  const userStatus = membershipInfo && membershipInfo.status
   const isMembershipShow = userStatus === "ACTIVE"
   const isReservationShow = userStatus === "ACTIVE"
 
@@ -166,11 +166,11 @@ const Profile = (props) => {
   }
 
   const extendMembership = async () => {
-    const {end_date} = membershipInfo;
+    const {end_date, start_date, status} = membershipInfo;
     const userId = sessionStorage.getItem("userId");
     const options = {
       method: "PUT",
-      body: JSON.stringify({end_date}),
+      body: JSON.stringify({start_date,end_date, status: "ACTIVE"}),
       headers: {
         "Content-Type": "application/json",
       }
@@ -378,9 +378,11 @@ const Profile = (props) => {
               </div>
             </div>
           </form>
+          {!(reservationInfo.is_pickedUp === 1 && reservationInfo.is_car_returned === 0) &&
           <MDBBtn color="cyan" type="submit" onClick={cancelReservation}>
             Cancel Reservation
           </MDBBtn>
+          }
           {reservationInfo.is_pickedUp === 0 && reservationInfo.is_car_returned === 0 &&
           <MDBBtn color="cyan" type="submit" onClick={pickupVehicle}>
             PickUp Vehicle
@@ -592,7 +594,7 @@ const Profile = (props) => {
           </MDBCard>
         </ExpansionPanel>
         {isMembershipShow && membershipComponent}
-        {isReservationShow && reservationInfo.vehicle_uuid && reservationComponent}
+        {isReservationShow && reservationInfo &&reservationInfo.vehicle_uuid && reservationComponent}
       </MDBContainer>
     </div>
   )
