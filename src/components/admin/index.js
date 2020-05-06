@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react"
+import React, { useState, useEffect, Fragment } from "react"
 import MaterialTable from "material-table"
 import { APIS } from "../../requests/api-helper.js"
 import useFetch from "../../hooks/hooks"
@@ -21,7 +21,72 @@ import { store } from "react-notifications-component"
 
 const MembersList = () => {
   const [isSent, setIsSent] = useState(false)
-  const res = useFetch(APIS.membersList, {})
+  const [members,setMembers] = useState([])
+  const [memberDisplayData, setMembersDisplayData] = useState([])
+
+  useEffect(() => {
+    onLoad()
+  }, [])
+
+   async function onLoad () {
+     console.log("start")
+     const res = await fetch(APIS.membersList, {})
+     const membersList = await res.json()
+     setMembers(membersList)
+     prepareTable(membersList)
+
+   }
+  function prepareTable(res){
+    const data =
+      res &&
+      res.map((user) => {
+        let rows = {
+          user_full_name: user.first_name.concat(" ",user.last_name),
+          status: user.status,
+          startDate: user.start_date,
+          endDate: user.end_date,
+        }
+
+        if (user.status === "ACTIVE" || user.status === "active" ) {
+          rows = {
+            ...rows,
+            action: (
+              <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
+                Terminate
+              </MDBBtn>
+            ),
+          }
+        } else if (user.status === "PENDING" || user.status === "pending" ){
+          rows = {
+            ...rows,
+            action: (
+              <Fragment>
+                <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.user_uuid, user.status)}>
+                  Approve
+                </MDBBtn>
+                <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
+                  Deny
+                </MDBBtn>
+              </Fragment>
+            ),
+          }
+        }
+
+        else {
+          rows = {
+            ...rows,
+            action: (
+              <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.uuid, user.status)}>
+                Approve
+              </MDBBtn>
+            ),
+          }
+        }
+        return rows
+      })
+    setMembersDisplayData(data)
+    return data
+  }
 
   const handleAction = (userId) => {
     const payload = {
@@ -54,7 +119,7 @@ const MembersList = () => {
       .catch(() => alert("There was an error, please try again"))
   }
 
-  const handleAdminApproval = (userId, status) => {
+  const handleAdminApproval = async(userId, status) => {
     const payload = {
       start_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
       end_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -67,8 +132,11 @@ const MembersList = () => {
         "Content-Type": "application/json",
       },
     }
-    const res =  fetch(APIS.updateUserMembershipByUserUuid(userId), options)
-      .then(() => store.addNotification({
+    const res =  await fetch(APIS.updateUserMembershipByUserUuid(userId), options)
+      const deleteRes = await res.json()
+      onLoad();
+
+      deleteRes && store.addNotification({
         title: "Approve Membership",
         message: "You just approved membeship  successfully !",
         showIcon: true,
@@ -82,8 +150,6 @@ const MembersList = () => {
           onScreen: true,
         },
       })
-      )
-      .catch(() => alert("There was an error, please try again"))
   }
 
   const onSignOut = (e) => {
@@ -117,54 +183,6 @@ const MembersList = () => {
       field: "action",
     },
   ]
-
-  const data =
-    res.response &&
-    res.response.map((user) => {
-      let rows = {
-        user_full_name: user.first_name.concat(" ",user.last_name),
-        status: user.status,
-        startDate: user.start_date,
-        endDate: user.end_date,
-      }
-
-
-      if (user.status === "ACTIVE" || user.status === "active") {
-        rows = {
-          ...rows,
-          action: (
-            <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
-              Terminate
-            </MDBBtn>
-          ),
-        }
-      } else if (user.status === "PENDING" || user.status === "pending"){
-        rows = {
-          ...rows,
-          action: (
-            <Fragment>
-          <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.user_uuid, user.status)}>
-            Approve
-          </MDBBtn>
-            <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
-              Deny
-            </MDBBtn>
-              </Fragment>
-          ),
-        }
-      }
-      else {
-        rows = {
-          ...rows,
-          action: (
-            <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.uuid, user.status)}>
-              Approve
-            </MDBBtn>
-          ),
-        }
-      }
-      return rows
-    })
 
   return (
     <div>
@@ -234,7 +252,7 @@ const MembersList = () => {
       <MDBContainer className="margin-top-50">
         <MDBTable striped bordered hover>
           <MDBTableHead columns={columns} color="cyan" textWhite bordered />
-          <MDBTableBody rows={data} />
+          <MDBTableBody rows={memberDisplayData} />
         </MDBTable>
       </MDBContainer>
     </div>

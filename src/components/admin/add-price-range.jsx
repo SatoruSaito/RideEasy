@@ -80,6 +80,8 @@ const AddPriceRange = () => {
     }
 
     const res = await fetch(APIS.addVehicleRange(uuid),options)
+    const priceRangeRes = await res.json();
+    loadPriceRange(rangeData.vehicle_type_uuid)
     reset()
     store.addNotification({
       title: "Vehicle type Price range update",
@@ -98,7 +100,7 @@ const AddPriceRange = () => {
 
   }
 
-  const loadPriceRange = async(id) =>{
+  const loadPriceRange = async(id) => {
     const res = await fetch(APIS.priceRangeByVehicleType(id), {})
     const priceRange = await res.json();
     const sortedData= sortBy(priceRange, ['min_hours']);
