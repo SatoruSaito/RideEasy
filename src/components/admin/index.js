@@ -134,7 +134,7 @@ const MembersList = () => {
           ...rows,
           action: (
             <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
-              Deny
+              Terminate
             </MDBBtn>
           ),
         }

@@ -24,6 +24,7 @@ export const APIS = {
   priceRange: (vehicleUuid) => `${BASE_URL}/vehicle_type/${vehicleUuid}/vehiclepricerange/totalprice`,
   priceRangeByVehicleType: (vehicleUuid) => `${BASE_URL}/vehicle_type/${vehicleUuid}/vehiclepricerange`,
   addVehicleRange: (priceRangeUuid) => `${BASE_URL}/vehiclepricerange/${priceRangeUuid}`,
-  returnVehicle: (reservationId) => `${BASE_URL}/reservations/${reservationId}/return_vehicle`
+  returnVehicle: (reservationId) => `${BASE_URL}/reservations/${reservationId}/return_vehicle`,
+  vehiclesByLocationId: (locationId) => `${BASE_URL}/locations/${locationId}/vehicles`
 
 }

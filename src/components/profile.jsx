@@ -594,7 +594,7 @@ const Profile = (props) => {
           </MDBCard>
         </ExpansionPanel>
         {isMembershipShow && membershipComponent}
-        {isReservationShow && reservationInfo &&reservationInfo.vehicle_uuid && reservationComponent}
+        {isReservationShow && reservationInfo && reservationInfo.vehicle_uuid && reservationComponent}
       </MDBContainer>
     </div>
   )

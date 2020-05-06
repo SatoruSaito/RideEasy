@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Autocomplete from "react-google-autocomplete"
 import { useForm } from "react-hook-form"
+import _map from "lodash/map";
 import {
   MDBContainer,
   MDBBtn,
@@ -38,17 +39,38 @@ const AddRentalLocation = () => {
   },[])
 
   const onLoad = async() => {
+
+
     const locationsRes = await fetch(APIS.locations, {})
     const locations = await locationsRes.json()
+
+   const vehicles =await Promise.all(
+      locations.map(location =>
+        fetch(APIS.vehiclesByLocationId(location.uuid)).then(res => res.json())
+      )
+    )
+   const reservedVehicles = vehicles.reduce((memo,vehicle) => {
+     console.log("vehicle",vehicle)
+      if(vehicle.reserved_vehicles && vehicle.reserved_vehicles.length >0) {
+        const filtered = _map(vehicle.reserved_vehicles, 'uuid')
+        memo = [...memo, ...filtered]
+      }
+      return memo
+
+    },[]);
+    console.log(reservedVehicles)
 
 
     const data =
       locations &&
       locations.map(({uuid, name, address, state, zip_code, capacity,number_of_vehicles }) => {
+
+        let isDisabled = reservedVehicles.includes(uuid)
         let rows = {
           uuid, name, address, state, zip_code, capacity,number_of_vehicles,
           action: (
-            <MDBBtn color="red" size="sm" onClick={() => handleDeleteLocation(uuid)}>
+
+            <MDBBtn color={isDisabled ? "grey": "red"} size="sm" onClick={() => handleDeleteLocation(uuid)} disabled={isDisabled}>
               Delete
             </MDBBtn>
           )
@@ -86,9 +108,7 @@ const AddRentalLocation = () => {
         "Content-Type": "application/json",
       },
     }
-    const response = fetch(APIS.addLocation, options).then((res) => console.log(res))
-
-    store.addNotification({
+    const response = fetch(APIS.addLocation, options).then((res) =>    store.addNotification({
       title: "Add Location",
       message: "New Location has been added successfully !",
       showIcon: true,
@@ -101,7 +121,8 @@ const AddRentalLocation = () => {
         duration: 3000,
         onScreen: true,
       },
-    })
+    }))
+
     reset();
   }
   const onSignOut = (e) => {
