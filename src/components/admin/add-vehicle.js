@@ -39,6 +39,7 @@ const AddVehicle = () => {
   const [vehicleTypes, setVehicleTypes] = useState([])
   const [locations, setLocations] = useState([])
   const [vehicles, setVehicles] = useState([])
+  const [displayData,setDisplayData] = useState([])
 
   useEffect(() => {
     onLoad()
@@ -56,7 +57,12 @@ const AddVehicle = () => {
 
     const vehiclesRes = await fetch(APIS.vehicles, {})
     const vehicles = await vehiclesRes.json()
+    vehicles && !!vehicles.length &&  setVehicles(vehicles)
+    vehicles && !!vehicles.length &&  prepareTable(vehicles)
 
+  }
+
+  function prepareTable(vehicles){
     const data =
       vehicles &&
       vehicles.map(({uuid, current_mileage, registration_number, year, make, model}) => {
@@ -72,7 +78,8 @@ const AddVehicle = () => {
         return rows
 
       });
-    setVehicles(data)
+    setDisplayData(data)
+    return data
   }
   const columns = [
     {
@@ -112,14 +119,14 @@ const AddVehicle = () => {
   ]
 
 
-  const handleDeleteVehicle = (id) => {
+  const handleDeleteVehicle = async(id) => {
     const options = {
       method: "DELETE"
     }
 
-     const deleteVehicle = fetch(APIS.deleteVehicle(id), options)
-
-    deleteVehicle &&  store.addNotification({
+     const deleteVehicle = await fetch(APIS.deleteVehicle(id), options)
+    const deletedVehicle = await deleteVehicle.json()
+    deletedVehicle &&  store.addNotification({
       title: "Delete vehicle",
       message: "Vehicle has been deleted successfully !",
       showIcon: true,
@@ -142,9 +149,8 @@ const AddVehicle = () => {
 
 
   const { register, handleSubmit, watch, errors, reset } = useForm()
-  const onSubmit = (payload) => {
 
-
+  const onSubmit = async(payload) => {
     const options = {
       method: "POST",
       body : JSON.stringify({...payload, is_reserved : false}),
@@ -152,9 +158,15 @@ const AddVehicle = () => {
         "Content-Type": "application/json",
       }
     }
-    const response = fetch(APIS.vehicles, options).then((res) =>  store.addNotification({
-      title: "Add vehicle",
-      message: "Vehicle has been added successfully !",
+
+    const response =  await fetch(APIS.vehicles, options)
+    const {id, ...other} = await response.json();
+    setVehicles([...vehicles, other])
+    prepareTable([...vehicles, other])
+
+    other && store.addNotification({
+      title: "vehicle Added",
+      message: "vehicle has been added  successfully !!",
       showIcon: true,
       type: "success",
       insert: "bottom",
@@ -164,8 +176,8 @@ const AddVehicle = () => {
       dismiss: {
         duration: 3000,
         onScreen: true,
-      },
-    }))
+      }
+    })
     reset()
   }
 
@@ -247,7 +259,7 @@ const AddVehicle = () => {
 
           <MDBTable striped bordered hover>
             <MDBTableHead columns={columns} color="cyan" textWhite bordered />
-            <MDBTableBody rows={vehicles} />
+            <MDBTableBody rows={displayData} />
           </MDBTable>
         </ExpansionPanel>
         <ExpansionPanel>
