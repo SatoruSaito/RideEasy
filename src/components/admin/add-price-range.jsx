@@ -133,13 +133,13 @@ const AddPriceRange = () => {
       sort: "asc",
     },
     {
-      label: "Price",
-      field: "price",
+      label: " Late fee",
+      field: "late_fee",
       sort: "asc",
     },
     {
-      label: " Late fee",
-      field: "late_fee",
+      label: "Price",
+      field: "price",
       sort: "asc",
     }
   ]
