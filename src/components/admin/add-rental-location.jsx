@@ -81,8 +81,24 @@ const AddRentalLocation = () => {
     setLocations(data)
 
   }
-  const handleDeleteLocation =() =>{
-
+  const handleDeleteLocation = (locationId) =>{
+    const options = {
+      method: "DELETE"
+    }
+    const deleteLocation = fetch(APIS.deleteLocation(locationId), options).then (res =>  store.addNotification({
+      title: "Delete Loaction",
+      message: "Location has been deleted successfully !!",
+      showIcon: true,
+      type: "success",
+      insert: "bottom",
+      container: "top-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      }
+    }))
   }
 
   const handleChangeAddress = (place) => {
