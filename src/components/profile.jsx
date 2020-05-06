@@ -248,9 +248,17 @@ const Profile = (props) => {
   }
 
   const returnVehicle = async () => {
-    const reservationId = reservationInfo.uuid
+    const reservationId = reservationInfo.uuid;
+    const payload = {
+      start_date : reservationInfo.start_date,
+      end_date : reservationInfo.end_date,
+      user_uuid : reservationInfo.user_uuid,
+      vehicle_uuid: reservationInfo.vehicle_uuid,
+     is_pickedUp: reservationInfo.is_pickedUp
+  }
     const options = {
       method: "PUT",
+      body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",
       },
