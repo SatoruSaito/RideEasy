@@ -49,6 +49,11 @@ export function setCookie(cname, cvalue, exdays, path) {
   document.cookie = cname + "=" + cvalue + ";" + expires + "; path=" + path + ";"
 }
 
-export default function formatDateToISO(date){
-return new Date(date).toISOString()
+export  function formatDateToISO(date){
+return date && new Date(date).toISOString()
 }
+
+export  function formatDatetoLocal(date){
+  return  date && new Date(date).toLocaleDateString()
+}
+

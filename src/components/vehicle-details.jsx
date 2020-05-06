@@ -3,7 +3,8 @@ import { APIS } from "../requests/api-helper.js"
 import useFetch from "../hooks/hooks"
 import { store } from "react-notifications-component";
 import isEmpty from "lodash/isEmpty";
-import formatDateToISO from '../utils/common'
+import {formatDateToISO} from '../utils/common'
+import cognitoUtils from "../utils/cognitoUtils"
 import {
   MDBContainer,
   MDBBtn,
@@ -37,7 +38,6 @@ const VehicleDetails = (props) => {
    async function onLoad(){
     const res = await fetch(APIS.vehicleDetails(vehicleId), {})
     const data = await res.json()
-    console.log("data", data);
     setVehicle(data);
     const vehicle_type_id = data  && data.vehicle_type_uuid
     const ISOStartDate = formatDateToISO(startDate);
@@ -45,7 +45,6 @@ const VehicleDetails = (props) => {
     const pricerange =  await fetch(`${APIS.priceRange(vehicle_type_id)}?start_date=${ISOStartDate}&end_date=${ISOEndDate}`, {})
 
     const pricerangeData = await pricerange.json()
-     console.log("pricerange",pricerangeData);
      setPriceRange(pricerangeData);
 
 
@@ -97,7 +96,12 @@ const VehicleDetails = (props) => {
       })
     }
   }
-   console.log("vehicles",vehicle && vehicle)
+
+  const onSignOut = (e) => {
+    e.preventDefault()
+    cognitoUtils.signOutCognitoSession()
+  }
+
 
   return (
     <div>
@@ -122,6 +126,11 @@ const VehicleDetails = (props) => {
               <MDBNavItem >
                 <MDBBtn color="indigo" href={"/user/vehicles"} mdbWavesEffect>
                   Vehicles
+                </MDBBtn>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBBtn size="sm" color="indigo" onClick={onSignOut} mdbWavesEffect>
+                  Log Out
                 </MDBBtn>
               </MDBNavItem>
             </MDBNavbarNav>
@@ -218,7 +227,7 @@ const VehicleDetails = (props) => {
 
                   <div class="form-group row">
                     <label class="col-sm-5">Price </label>
-                    <div class="col-sm-7">{priceRange}</div>
+                    <div class="col-sm-7">{!!priceRange.length && priceRange[0].price} </div>
                   </div>
                   <div className="text-center py-4 mt- o3">
                     <MDBBtn

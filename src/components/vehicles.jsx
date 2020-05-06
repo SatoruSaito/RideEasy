@@ -173,7 +173,6 @@ const Vehicles = () => {
                 name="reservation_start_time"
                 valueName="selected" // DateSelect value's name is selected
                 onChange={([selected]) => {
-                  console.log("selected",selected)
                   setStartDate(selected)
                   return selected;
                 }}

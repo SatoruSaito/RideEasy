@@ -9,7 +9,8 @@ import Callback from "./components/callback"
 import Admin from "./components/admin"
 import AddLoaction from "./components/admin/add-rental-location"
 import AddVehicle from "./components/admin/add-vehicle";
-import UpdateMembership from "./components/admin/update-membership";
+import AddPriceRange from "./components/admin/add-price-range";
+import UpdateMembership from "./components/admin/update-membership.js";
 
 const App = () => (
   <Router>
@@ -24,6 +25,7 @@ const App = () => (
       <Route exact path="/admin/addLocation" component={AddLoaction} />
       <Route exact path="/admin/addVehicle" component={AddVehicle} />
       <Route exact path="/admin/membershipUpdate" component={UpdateMembership} />
+      <Route exact path="/admin/addPriceRange" component={AddPriceRange} />
     </Switch>
   </Router>
 )

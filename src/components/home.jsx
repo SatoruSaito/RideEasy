@@ -107,9 +107,9 @@ const Home = () => {
           )
         case "INACTIVE":
           return (
-            <MDBAlert color="info" dismiss>
-              <strong>Your membership has been cancelled </strong>
-            </MDBAlert>
+            <Redirect
+              to={{ pathname: "/user/profile", state: { userId, userStatus } }}
+            />
           )
         case "ACTIVE":
           return <Redirect to="/user/vehicles" />
@@ -178,12 +178,7 @@ const Home = () => {
                   </h1>
                   <hr className="hr-light" />
                   <h6 className="mb-4">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text
-                    ever since the 1500s. It was popularised in the 1960s with the
-                    release of Letraset sheets containing Lorem Ipsum passages, and
-                    more recently with desktop publishing software like Aldus
-                    PageMaker including versions of Lorem Ipsum
+                    Planning a family trip or an excursion with friends? RideEasy is here to help! Reserve your next ride with RideEasy to have an amazing hassle-free experience. RideEasy is a constantly growing and competitive car rental service, which aims at becoming one of the world leaders in rent-a-car industry. We offer a wide selection of vehicles ranging from luxury cars to convenient pickups, at various locations all around the San Francisco Bay Area. With our efficient self-checkout feature you can reserve cars effortlessly in a matter of minutes…
                   </h6>
                 </MDBAnimation>
               </MDBCol>

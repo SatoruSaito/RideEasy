@@ -16,24 +16,49 @@ import {
 } from "mdbreact"
 import logo from "../../images/rideeasy.png"
 import cognitoUtils from "../../utils/cognitoUtils.js"
-import moment from "moment"
+import moment from "moment";
+import { store } from "react-notifications-component"
 
 const MembersList = () => {
   const [isSent, setIsSent] = useState(false)
   const res = useFetch(APIS.membersList, {})
-  console.log("@res", res)
 
-  const handleAction = (membershipId) => {
-    fetch(APIS.terminateMembership(membershipId), { method: "PATCH" })
-      .then(() => setIsSent(true))
-      .catch(() => alert("There was an error, please try again"))
-  }
-
-  const handleAdminApproval = (userId) => {
+  const handleAction = (userId) => {
     const payload = {
       start_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
       end_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
-      status : "ACTIVE"
+      status :  'INACTIVE'
+    }
+    const options = {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    fetch(APIS.updateUserMembershipByUserUuid(userId), options)
+      .then(() => store.addNotification({
+        title: "Deny Membership",
+        message: "You just Denied membeship successfully !",
+        showIcon: true,
+        type: "success",
+        insert: "bottom",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true,
+        },
+      }))
+      .catch(() => alert("There was an error, please try again"))
+  }
+
+  const handleAdminApproval = (userId, status) => {
+    const payload = {
+      start_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
+      end_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
+      status :  'ACTIVE'
     }
     const options = {
       method: "PUT",
@@ -43,7 +68,21 @@ const MembersList = () => {
       },
     }
     const res =  fetch(APIS.updateUserMembershipByUserUuid(userId), options)
-      .then(() => setIsSent(true))
+      .then(() => store.addNotification({
+        title: "Approve Membership",
+        message: "You just approved membeship  successfully !",
+        showIcon: true,
+        type: "success",
+        insert: "bottom",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true,
+        },
+      })
+      )
       .catch(() => alert("There was an error, please try again"))
   }
 
@@ -91,7 +130,6 @@ const MembersList = () => {
 
 
       if (user.status === "ACTIVE" || user.status === "active") {
-        console.log("user", user.status)
         rows = {
           ...rows,
           action: (
@@ -105,7 +143,7 @@ const MembersList = () => {
           ...rows,
           action: (
             <Fragment>
-          <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.user_uuid)}>
+          <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.user_uuid, user.status)}>
             Approve
           </MDBBtn>
             <MDBBtn color="red" size="sm" onClick={() => handleAction(user.uuid)}>
@@ -116,11 +154,10 @@ const MembersList = () => {
         }
       }
       else {
-        console.log("else", user.status)
         rows = {
           ...rows,
           action: (
-            <MDBBtn color="green" size="sm" onClick={() => handleAction(user.uuid)}>
+            <MDBBtn color="green" size="sm" onClick={() => handleAdminApproval(user.uuid, user.status)}>
               Approve
             </MDBBtn>
           ),
@@ -148,18 +185,8 @@ const MembersList = () => {
                 <MDBBtn
                   size="sm"
                   color="indigo"
-                  href={"/admin"}
-                  mdbWavesEffect
-                  active
-                >
-                  Members List
-                </MDBBtn>
-              </MDBNavItem>
-              <MDBNavItem>
-                <MDBBtn
-                  size="sm"
-                  color="indigo"
                   href={"/admin/membershipUpdate"}
+                  size="sm"
                   mdbWavesEffect
                 >
                   update membership
@@ -172,7 +199,17 @@ const MembersList = () => {
                   mdbWavesEffect
                   size="sm"
                 >
-                  Add Vehicle
+                  Vehicles
+                </MDBBtn>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBBtn
+                  color="indigo"
+                  href={"/admin/addPriceRange"}
+                  mdbWavesEffect
+                  size="sm"
+                >
+                  Price Range
                 </MDBBtn>
               </MDBNavItem>
               <MDBNavItem>
@@ -182,7 +219,7 @@ const MembersList = () => {
                   mdbWavesEffect
                   size="sm"
                 >
-                  Add location
+                  locations
                 </MDBBtn>
               </MDBNavItem>
               <MDBNavItem>

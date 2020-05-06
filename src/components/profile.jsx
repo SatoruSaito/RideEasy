@@ -39,13 +39,15 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel"
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
 import Typography from "@material-ui/core/Typography"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import {formatDatetoLocal} from '../utils/common'
 
 const Profile = (props) => {
   const [userInfo, setUserInfo] = useState({})
   const [membershipInfo, setMembershipInfo] = useState({})
   const [reservationInfo, setReservationInfo] = useState([])
   const [vehicleInfo, setVehicleInfo] = useState({})
+  const [policy, setPolicy] = useState([])
 
   const userId = sessionStorage.getItem("userId")
   const userStatus = sessionStorage.getItem("userStatus")
@@ -68,7 +70,6 @@ const Profile = (props) => {
     const reservation = await fetch(APIS.getReservation(userId), {})
     const reservationRes = await reservation.json()
     setReservationInfo(reservationRes)
-    console.log("reservationRes", reservationRes)
 
     const vehicleDetails =
       reservationRes &&
@@ -78,7 +79,7 @@ const Profile = (props) => {
 
     const currentMembershipPrice = await fetch(APIS.policy,{})
     const policy = await currentMembershipPrice.json();
-    console.log("policy",currentMembershipPrice);
+    setPolicy(policy)
   }
 
   const { register, handleSubmit, watch, errors } = useForm()
@@ -136,7 +137,9 @@ const Profile = (props) => {
   }
 
   const updateMembership = async (status) => {
-    const { start_date, end_date } = membershipInfo
+    const StatusText = status ==='ACTIVE' ? 'Cancel Membership' : 'Activate Membership'
+    const { start_date, end_date } = membershipInfo;
+    const userId = sessionStorage.getItem("userId")
 
     const options = {
       method: "PUT",
@@ -145,7 +148,48 @@ const Profile = (props) => {
         "Content-Type": "application/json",
       },
     }
-    const res = await fetch(APIS.terminateMembership(userId), options)
+    const res = await fetch(APIS.userStatus(userId), options)
+    store.addNotification({
+      title: StatusText,
+      message: `${StatusText} successfully !`,
+      showIcon: true,
+      type: "success",
+      insert: "bottom",
+      container: "bottom-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    })
+  }
+
+  const extendMembership = async () => {
+    const {end_date} = membershipInfo;
+    const userId = sessionStorage.getItem("userId");
+    const options = {
+      method: "PUT",
+      body: JSON.stringify({end_date}),
+      headers: {
+        "Content-Type": "application/json",
+      }
+    }
+    const res = await fetch(APIS.userStatus(userId), options);
+    store.addNotification({
+      title: "Extend Membership",
+      message:'Membership has been extend to next 6 months successfully ! ',
+      showIcon: true,
+      type: "success",
+      insert: "bottom",
+      container: "bottom-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    })
   }
 
   const cancelReservation = async () => {
@@ -157,6 +201,22 @@ const Profile = (props) => {
       },
     }
     const res = await fetch(APIS.deleteReservation(reservationId), options)
+    const {cancellation_fee} = await res.json();
+    console.log("cancelation_fees",cancellation_fee)
+    store.addNotification({
+      title: "Cancelation fees",
+      message: `ancelation fees in  ${cancellation_fee} !!`,
+      showIcon: true,
+      type: "success",
+      insert: "bottom",
+      container: "bottom-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    })
   }
 
   const pickupVehicle = async () => {
@@ -177,7 +237,7 @@ const Profile = (props) => {
         showIcon: true,
         type: "success",
         insert: "bottom",
-        container: "top-right",
+        container: "bottom-right",
         animationIn: ["animated", "fadeIn"],
         animationOut: ["animated", "fadeOut"],
         dismiss: {
@@ -195,7 +255,22 @@ const Profile = (props) => {
         "Content-Type": "application/json",
       },
     }
-    const res = await fetch(APIS.pickupVehicle(reservationId), options)
+    const res = await fetch(APIS.returnVehicle(reservationId), options)
+    const rerturnVehicleInfo = await res.json();
+    store.addNotification({
+      title: "Return Vehicle",
+      message: "Thanks  for return up the vehicle",
+      showIcon: true,
+      type: "success",
+      insert: "bottom",
+      container: "bottom-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    })
   }
 
   const membershipComponent = (
@@ -212,9 +287,16 @@ const Profile = (props) => {
           <Typography>
             Your membership is valid till{" "}
             {membershipInfo.end_date &&
-              new Date(membershipInfo.end_date).toLocaleDateString()}
-            You can cancel Membership anytime.
+            formatDatetoLocal(membershipInfo.end_date)} &nbsp;
+            You can cancel and extend Membership anytime.
             <p>
+              <MDBBtn
+                color="cyan"
+                type="submit"
+                onClick={() => extendMembership()}
+              >
+                Extend Membership
+              </MDBBtn>
               <MDBBtn
                 color="cyan"
                 type="submit"
@@ -252,8 +334,6 @@ const Profile = (props) => {
       >
         <Typography>Reservation</Typography>
       </ExpansionPanelSummary>
-
-        {reservationInfo.map((reservation) =>
           <MDBCard className="col-md-7 col-md-offset-2">
         <MDBCardBody>
           <form>
@@ -267,7 +347,7 @@ const Profile = (props) => {
                   class="form-control-plaintext"
                   value={
                     reservationInfo.start_date &&
-                    new Date(reservationInfo.start_date).toLocaleDateString()
+                    new Date(reservationInfo.start_date).toLocaleString()
                   }
                 />
               </div>
@@ -281,7 +361,7 @@ const Profile = (props) => {
                   class="form-control-plaintext"
                   value={
                     reservationInfo.end_date &&
-                    new Date(reservationInfo.end_date).toLocaleDateString()
+                    new Date(reservationInfo.end_date).toLocaleString()
                   }
                 />
               </div>
@@ -314,11 +394,9 @@ const Profile = (props) => {
           }
         </MDBCardBody>
           </MDBCard>
-        )}
 
     </ExpansionPanel>
   )
-  console.log("reservationInfo",reservationInfo)
 
   return (
     <div>
@@ -497,15 +575,9 @@ const Profile = (props) => {
                   <div class="col-sm-7">
                     <input
                       type="text"
-                      class="form-control"
-                      placeholder="Credit card number"
-                      ref={register}
-                      name="credit_card_number"
-                      defaultValue={
-                        userInfo.credit_card_number
-                          ? userInfo.credit_card_number
-                          : ""
-                      }
+                      readonly
+                      class="form-control-plaintext"
+                      value={!!policy.length && policy[0].price}
                     />
                   </div>
                 </div>
@@ -520,7 +592,7 @@ const Profile = (props) => {
           </MDBCard>
         </ExpansionPanel>
         {isMembershipShow && membershipComponent}
-        {isReservationShow && reservationInfo && reservationComponent}
+        {isReservationShow && reservationInfo.vehicle_uuid && reservationComponent}
       </MDBContainer>
     </div>
   )
