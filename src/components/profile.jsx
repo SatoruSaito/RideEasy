@@ -41,6 +41,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
 import Typography from "@material-ui/core/Typography"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {formatDatetoLocal} from '../utils/common'
+import isEmpty from "lodash/isEmpty";
 
 const Profile = (props) => {
   const [userInfo, setUserInfo] = useState({})
@@ -48,6 +49,7 @@ const Profile = (props) => {
   const [reservationInfo, setReservationInfo] = useState([])
   const [vehicleInfo, setVehicleInfo] = useState({})
   const [policy, setPolicy] = useState([])
+  const [returnVehicleInfo,setReturnVehicleInfo] = useState([])
 
   const userId = sessionStorage.getItem("userId")
   const userStatus = membershipInfo && membershipInfo.status
@@ -58,19 +60,27 @@ const Profile = (props) => {
     onLoad()
   }, [])
 
+  const getReservationInfo = async() => {
+    const reservation = await fetch(APIS.getReservation(userId), {})
+    const reservationRes = await reservation.json()
+    setReservationInfo(reservationRes)
+    return reservationRes
+  }
+   const getMembershipInfo = async() =>{
+    const res = await fetch(APIS.userStatus(userId), {})
+    const membershipRes = await res.json()
+    setMembershipInfo(membershipRes)
+    return membershipRes
+  }
+
   async function onLoad() {
     const response = await fetch(APIS.userDetails(userId), {})
     const payload = await response.json()
     setUserInfo(payload)
 
-    const res = await fetch(APIS.userStatus(userId), {})
-    const membershipRes = await res.json()
-    setMembershipInfo(membershipRes)
+   const membershipInfo = await getMembershipInfo()
 
-    const reservation = await fetch(APIS.getReservation(userId), {})
-    const reservationRes = await reservation.json()
-    setReservationInfo(reservationRes)
-
+   const reservationRes= await getReservationInfo()
     const vehicleDetails =
       reservationRes &&
       (await fetch(APIS.vehicleDetails(reservationRes.vehicle_uuid), {}))
@@ -201,11 +211,13 @@ const Profile = (props) => {
       },
     }
     const res = await fetch(APIS.deleteReservation(reservationId), options)
-    const {cancellation_fee} = await res.json();
-    console.log("cancelation_fees",cancellation_fee)
+    const cancelRes = await res.json();
+    setReservationInfo(res);
+    getReservationInfo()
+
     store.addNotification({
       title: "Cancelation fees",
-      message: `cancelation fee is ${cancellation_fee} !!`,
+      message: `cancelation fee is ${cancelRes.cancellation_fee} !!`,
       showIcon: true,
       type: "success",
       insert: "bottom",
@@ -229,7 +241,10 @@ const Profile = (props) => {
     }
     const res = await fetch(APIS.pickupVehicle(reservationId), options)
     const pickupRes = await res.json()
-    console.log("re", res)
+
+    setReservationInfo(res);
+    getReservationInfo()
+
     pickupRes &&
       store.addNotification({
         title: "Pickup",
@@ -265,6 +280,8 @@ const Profile = (props) => {
     }
     const res = await fetch(APIS.returnVehicle(reservationId), options)
     const rerturnVehicleInfo = await res.json();
+    setReturnVehicleInfo(rerturnVehicleInfo)
+    getReservationInfo()
     store.addNotification({
       title: "Return Vehicle",
       message: "Thanks  for return up the vehicle",
@@ -386,7 +403,7 @@ const Profile = (props) => {
               </div>
             </div>
           </form>
-          {!(reservationInfo.is_pickedUp === 1 && reservationInfo.is_car_returned === 0) &&
+          {!(reservationInfo.is_pickedUp === 1 && reservationInfo.is_car_returned === 0) && !(reservationInfo.is_pickedUp === 1 && reservationInfo.is_car_returned === 1) &&
           <MDBBtn color="cyan" type="submit" onClick={cancelReservation}>
             Cancel Reservation
           </MDBBtn>
@@ -403,6 +420,43 @@ const Profile = (props) => {
           </MDBBtn>
           }
         </MDBCardBody>
+            {!isEmpty(returnVehicleInfo) &&
+            <MDBCard className="col-md-offset-2">
+              <label className="col-sm-4 col-form-label">Return vehicle Info</label>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label"> Total Charges</label>
+                <div class="col-sm-8">
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control-plaintext"
+                    value={returnVehicleInfo.total_charges}
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label"> late fees</label>
+                <div class="col-sm-8">
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control-plaintext"
+                    value={returnVehicleInfo.late_fees}
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label"> Reservation Charges </label>
+                <div class="col-sm-8">
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control-plaintext"
+                    value={returnVehicleInfo.reservation_charges}
+                  />
+                </div>
+              </div>
+            </MDBCard> }
           </MDBCard>
 
     </ExpansionPanel>

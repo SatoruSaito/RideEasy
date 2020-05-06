@@ -39,8 +39,6 @@ const AddRentalLocation = () => {
   },[])
 
   const onLoad = async() => {
-
-
     const locationsRes = await fetch(APIS.locations, {})
     const locations = await locationsRes.json()
 
@@ -80,6 +78,7 @@ const AddRentalLocation = () => {
     setLocations(data)
 
   }
+
   const handleDeleteLocation = (locationId) =>{
     const options = {
       method: "DELETE"
@@ -104,7 +103,8 @@ const AddRentalLocation = () => {
     setAddress(place)
   }
   const { register, handleSubmit, watch, errors, reset } = useForm()
-  const onSubmit = ({ capacity, name, number_of_vehicles }) => {
+
+  const onSubmit = async({ capacity, name, number_of_vehicles }) => {
 
     const payload = {
       name,
@@ -123,7 +123,10 @@ const AddRentalLocation = () => {
         "Content-Type": "application/json",
       },
     }
-    const response = fetch(APIS.addLocation, options).then((res) =>    store.addNotification({
+    const response = await fetch(APIS.addLocation, options)
+    const locationRes = await response.json()
+    console.log(locationRes)
+    locationRes && store.addNotification({
       title: "Add Location",
       message: "New Location has been added successfully !",
       showIcon: true,
@@ -136,8 +139,10 @@ const AddRentalLocation = () => {
         duration: 3000,
         onScreen: true,
       },
-    }))
+    })
 
+    setLocations([...locations,locationRes])
+    onLoad()
     reset();
   }
   const onSignOut = (e) => {
