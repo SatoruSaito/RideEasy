@@ -204,6 +204,8 @@ User.getReservationByUserUuid = (userUuid, result) => {
       }
 
       if (res.length) {
+          //res[0].start_date = moment(res[0].start_date).utc().local().format('YYYY-MM-DD HH:mm:ss');
+          //res[0].end_date = moment(res[0].end_date).utc().local().format('YYYY-MM-DD HH:mm:ss');
           console.log("found Reservation details of given user: ", res[0]);
           result(null, res[0]);
           return;
