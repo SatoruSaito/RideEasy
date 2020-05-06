@@ -104,5 +104,18 @@ Location.findVehiclesByLocationUuid = (location_uuid, result) => {
     });
 };
 
+Location.deleteByUuid = (locationUuid, result) => {
+    sql.query(`UPDATE location SET is_deleted = 1 WHERE uuid = \'${escape(locationUuid)}\'`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        result(null,{message:"Location deleted successfully"});
+        console.log("Location with uuid %s deleted  %s ",locationUuid,res);
+    });
+};
+
+
 
 module.exports = Location;

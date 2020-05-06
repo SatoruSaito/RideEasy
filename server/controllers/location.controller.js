@@ -74,3 +74,19 @@ exports.findVehiclesByLocationUuid = (req, res) => {
         } else res.send(data);
     });
 };
+
+exports.deleteByUuid = (req, res) => {
+    Location.deleteByUuid(req.params.locationUuid, (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                    message: `Cannot delete location, location with the uuid ${req.params.locationUuid} not found.`
+                });
+            } else {
+                res.status(500).send({
+                    message: "Error retrieving location with uuid " + req.params.locationUuid
+                });
+            }
+        } else res.send(data);
+    });
+};

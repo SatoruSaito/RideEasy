@@ -12,4 +12,7 @@ module.exports = app => {
 
     // Retrieve vehicles at a given location
     app.get("/locations/:locationUuid/vehicles", location.findVehiclesByLocationUuid);
+
+    // Retrieve a single location with locationUuid
+    app.delete("/locations/:locationUuid", location.deleteByUuid);
 };
