@@ -30,19 +30,6 @@ reservation.create = (newReservation, result) => {
 
     console.log("created Reservation ", { id: res.insertId, ...newReservation })
     result(null, { id: res.insertId, ...newReservation })
-    var qry_str =
-      "UPDATE vehicle SET is_reserved = true WHERE uuid = '" +
-      escape(newReservation.vehicle_uuid) +
-      "'"
-    console.log("querystring = " + qry_str)
-    sql.query(qry_str, (err, res) => {
-      if (err) {
-        console.log("error: ", err)
-
-        return
-      }
-      console.log("vehicle table updated")
-    })
   })
 }
 
@@ -92,7 +79,7 @@ reservation.removebyUuid = (uuid, result) => {
           result(null,res);
           return;
         }
-        
+
         console.log("cancellation fee calculated");
         console.log("cancellation fee =" +res[0].cancellation_fee);
         //console.log("vehicle_type_uuid" + res[1].vehicletype);

@@ -9,4 +9,7 @@ module.exports = app => {
 
     // Retrieve a single location with locationUuid
     app.get("/locations/:locationUuid", location.findByUuid);
+
+    // Retrieve vehicles at a given location
+    app.get("/locations/:locationUuid/vehicles", location.findVehiclesByLocationUuid);
 };
