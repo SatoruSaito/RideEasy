@@ -199,7 +199,7 @@ const Vehicles = () => {
                 control={control}
                 register={register({ required: true })}
                 name="reservation_end_time"
-                valueName="selected" // DateSelect value's name is selected
+                valueName="selected"
                 onChange={([selected]) => {
                   setEndDate(selected)
                   return selected;

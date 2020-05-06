@@ -140,7 +140,7 @@ reservation.updateReservationForReturn = (reservationUuid, result) => {
           console.log("error: ", err)
           result(err, null)
         } else {
-          console.log("reservation updated", res)
+          console.log("reservation is_car_returned car_returned_date updated ", res)
           result(null, res)
         }
       }
@@ -155,7 +155,7 @@ reservation.increaseVehicleCount = (vehicle_uuid, result) => {
           console.log("error: ", err);
           result(err, null)
         } else {
-          console.log("Number_of_vehicles updated", res);
+          console.log("Number_of_vehicles updated ", res);
           result(null, res)
         }
       }
@@ -207,7 +207,8 @@ reservation.calculateCharges = (vehicle_uuid, start_date, end_date,reservation_c
       console.log("Unable to find vehicle with vehicle_uuid ",vehicle_uuid);
     }
 
-    // console.log("vehicle details ",vehicleDetails);
+    start_date = moment.utc(start_date).format('YYYY-MM-DD HH:mm:ss');
+    end_date = moment.utc(end_date).format('YYYY-MM-DD HH:mm:ss');
     let diff_ms = moment(end_date).diff(moment(start_date));
 
     // var duration = moment.duration(req.body.end_date.diff(req.body.start_date));
