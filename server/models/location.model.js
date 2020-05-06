@@ -1,5 +1,5 @@
 const sql = require("./db.js");
-
+const moment = require('moment');
 // constructor
 const Location = function(location) {
     this.uuid = location.uuid;
@@ -52,6 +52,55 @@ Location.getByUuid = (locationUuid, result) => {
         }
         // member with the uuid not found
         result({kind: "not_found"}, null);
+    });
+};
+
+Location.findVehiclesByLocationUuid = (location_uuid, result) => {
+    let current_date_time = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
+    let queryUnreservedVehicles = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make FROM vehicle v WHERE
+ v.location_uuid = \'${escape(location_uuid)}\'
+    and v.uuid
+    NOT IN (
+        SELECT r.vehicle_uuid FROM reservation r
+    WHERE \'${current_date_time}\' < r.end_date
+)`;
+
+    let queryReservedVehicles = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make FROM vehicle v WHERE
+ v.location_uuid = \'${escape(location_uuid)}\'
+    and v.uuid
+     IN (
+        SELECT r.vehicle_uuid FROM reservation r
+    WHERE \'${current_date_time}\' < r.end_date
+)`;
+    let unreservedVehicles = [];
+    let reservedVehicles = [];
+    sql.query(queryUnreservedVehicles, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+
+        if (res.length) {
+            unreservedVehicles.push(res);
+            console.log("queryUnreservedVehicles at location: ", res);
+
+        }
+
+        sql.query(queryReservedVehicles, (err, res) => {
+            if (err) {
+                console.log("error: ", err);
+                result(err, null);
+                return;
+            }
+
+            if (res.length) {
+                reservedVehicles.push(res);
+                console.log("queryReservedVehicles at location: ", res);
+            }
+            result(null,{unreserved_vehicles:unreservedVehicles, reserved_vehicles:reservedVehicles})
+
+        });
     });
 };
 
