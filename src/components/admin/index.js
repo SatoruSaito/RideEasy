@@ -88,7 +88,7 @@ const MembersList = () => {
     return data
   }
 
-  const handleAction = (userId) => {
+  const handleAction = async(userId) => {
     const payload = {
       start_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
       end_date : moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -101,22 +101,24 @@ const MembersList = () => {
         "Content-Type": "application/json",
       },
     }
-    fetch(APIS.updateUserMembershipByUserUuid(userId), options)
-      .then(() => store.addNotification({
-        title: "Deny Membership",
-        message: "You just Denied membeship successfully !",
-        showIcon: true,
-        type: "success",
-        insert: "bottom",
-        container: "top-right",
-        animationIn: ["animated", "fadeIn"],
-        animationOut: ["animated", "fadeOut"],
-        dismiss: {
-          duration: 3000,
-          onScreen: true,
-        },
-      }))
-      .catch(() => alert("There was an error, please try again"))
+    const res = await fetch(APIS.updateUserMembershipByUserUuid(userId), options)
+
+      onLoad();
+    res && store.addNotification({
+      title: "Deny Membership",
+      message: "You just Denied membeship successfully !",
+      showIcon: true,
+      type: "success",
+      insert: "bottom",
+      container: "top-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    })
+
   }
 
   const handleAdminApproval = async(userId, status) => {
