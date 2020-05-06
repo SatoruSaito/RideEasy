@@ -57,7 +57,7 @@ Location.getByUuid = (locationUuid, result) => {
 
 Location.findVehiclesByLocationUuid = (location_uuid, result) => {
     let current_date_time = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
-    let queryUnreservedVehicles = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make FROM vehicle v WHERE
+    let queryUnreservedVehicles = `SELECT v.uuid, v.location_uuid, v.vehicle_type_uuid, v.model, v.make FROM vehicle v WHERE
  v.location_uuid = \'${escape(location_uuid)}\'
     and v.uuid
     NOT IN (
@@ -65,7 +65,7 @@ Location.findVehiclesByLocationUuid = (location_uuid, result) => {
     WHERE \'${current_date_time}\' < r.end_date
 )`;
 
-    let queryReservedVehicles = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make FROM vehicle v WHERE
+    let queryReservedVehicles = `SELECT v.uuid, v.location_uuid, v.vehicle_type_uuid, v.model, v.make FROM vehicle v WHERE
  v.location_uuid = \'${escape(location_uuid)}\'
     and v.uuid
      IN (
