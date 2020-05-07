@@ -56,21 +56,21 @@ exports.create = (req, res) => {
 
 exports.returnVehicle =(req,res) => {
   console.log("INSIDE returnVehicle CONTROLER");
-  reservation.updateReservationForReturn (req.params.reservation_uuid, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `reservation  with the reservation_uuid ${req.params.reservation_uuid} not found.`
-        });
-      } else {
-        res.status(500).send({
-          message: `Error updating reservation with reservation_uuid ${req.params.reservation_uuid}`
-        });
-      }
-    } else {
-      if(data.changedRows == 0)
-        return res.send({message:"Vehicle has been previously returned"});
-      reservation.increaseVehicleCount(req.body.vehicle_uuid,(err,data) =>{
+  // reservation.updateReservationForReturn (req.params.reservation_uuid, (err, data) => {
+  //   if (err) {
+  //     if (err.kind === "not_found") {
+  //       res.status(404).send({
+  //         message: `reservation  with the reservation_uuid ${req.params.reservation_uuid} not found.`
+  //       });
+  //     } else {
+  //       res.status(500).send({
+  //         message: `Error updating reservation with reservation_uuid ${req.params.reservation_uuid}`
+  //       });
+  //     }
+  //   } else {
+      // if(data.changedRows == 0)
+      //   return res.send({message:"Vehicle has been previously returned"});
+      reservation.increaseVehicleCount(req.body.vehicle_uuid,(err,data) => {
         if (err) {
           if (err.kind === "not_found") {
             res.status(404).send({
@@ -81,15 +81,31 @@ exports.returnVehicle =(req,res) => {
               message: `Error updating number of vehicles in location table for vehicle_uuid ${req.body.vehicle_uuid}`
             });
           }
-        }else{
-          reservation.calculateCharges(req.body.vehicle_uuid ,req.body.start_date, req.body.end_date,(err,reservation_charges) =>{
-            res.send(reservation_charges);
-          });
+        } else {
+          reservation.calculateCharges(req.body.vehicle_uuid, req.body.start_date, req.body.end_date, (err, reservation_charges) => {
+            if (err)
+              res.status(500).send({
+                message: `Error calculating charges for vehicle_uuid ${req.body.vehicle_uuid}`
+              });
 
+            reservation.updateReservationForReturn(req.params.reservation_uuid, (err, data) => {
+              if (err) {
+                if (err.kind === "not_found") {
+                  res.status(404).send({
+                    message: `reservation  with the reservation_uuid ${req.params.reservation_uuid} not found.`
+                  });
+                } else {
+                  res.status(500).send({
+                    message: `Error updating reservation with reservation_uuid ${req.params.reservation_uuid}`
+                  });
+                }
+              } else {
+                res.send(reservation_charges);
+              }
+            });
+          });
         }
-      })
-    }
-  });
+      });
 };
 
 //Update is_pickeUp in reservation table when user clicks pick up

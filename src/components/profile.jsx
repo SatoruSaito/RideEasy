@@ -287,7 +287,7 @@ const Profile = (props) => {
     const res = await fetch(APIS.returnVehicle(reservationId), options)
     const rerturnVehicleInfo = await res.json();
     setReturnVehicleInfo(rerturnVehicleInfo)
-    getReservationInfo()
+    // getReservationInfo()
     store.addNotification({
       title: "Return Vehicle",
       message: "Thanks  for return up the vehicle",
@@ -305,6 +305,7 @@ const Profile = (props) => {
   }
 
   const submitFeedback = ()  => {
+    getReservationInfo()
     store.addNotification({
       title: "Feedabck",
       message: "Thank you for providing feedback",
