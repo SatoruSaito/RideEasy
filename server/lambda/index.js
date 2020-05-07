@@ -28,11 +28,21 @@ exports.handler = (event, context, callback) => {
             user_uuid: userProperties.sub,
             status: 'INCOMPLETE'
         };
+        console.log("######### newMembership payload ",newMembership);
+        console.log("######### newUser payload ",newUser);
         // Use the connection
         connection.query("INSERT INTO user SET ?", newUser, function (error, results, fields) {
-            if (error) callback(error);
+            if (error) {
+                console("############ ERROR OCCURRED WHILE INSERTING INTO USER");
+                console.log(error);
+                callback(error);
+            }
             connection.query("INSERT INTO membership SET ?", newMembership, function (error, results, fields) {
-                if (error) callback(error);
+                if (error) {
+                    console("############ ERROR OCCURRED WHILE INSERTING INTO membership");
+                    console.log(error);
+                    callback(error);
+                }
             });
             // When done with the connection, release it.
             connection.release();
