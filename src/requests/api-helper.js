@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000"
+const BASE_URL = "https://api.therideeasy.com"
 export const APIS = {
   vehicles: `${BASE_URL}/vehicles`,
   vehicleDetails: (vehicleId) => `${BASE_URL}/vehicles/${vehicleId}`,
