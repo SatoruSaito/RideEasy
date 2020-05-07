@@ -42,7 +42,7 @@ Vehicle.getBySearchCriteria = (
     let mytime1 = moment.utc().valueOf();
     let current_date_time = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
     let query = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make, v.year, v.registration_number, v.current_mileage, v.last_serviced_date, v.vehicle_condition, v.next_available_time, v.location_uuid FROM vehicle v
-    WHERE v.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\'
+    WHERE v.is_deleted = 0 AND v.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\'
     and v.location_uuid = \'${escape(location_uuid)}\'
     and (v.uuid
     NOT IN (
@@ -72,7 +72,7 @@ Vehicle.getBySearchCriteria = (
 
             if (!res.length) {
                 query = `SELECT v.uuid, v.vehicle_type_uuid, v.model, v.make, v.year, v.registration_number, v.current_mileage, v.last_serviced_date, v.vehicle_condition, v.next_available_time, v.location_uuid FROM vehicle v
-    WHERE v.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\'
+    WHERE v.is_deleted = 0 AND v.vehicle_type_uuid = \'${escape(vehicle_type_uuid)}\'
     and (v.uuid
     NOT IN (
         SELECT r.vehicle_uuid FROM reservation r
@@ -134,7 +134,7 @@ Vehicle.getVehicleByUuid = (vehicleUuid, result) => {
 //For Admin to retrieve all vehicles in the system
 
 Vehicle.getAllVehicles = (result) => {
-  sql.query("SELECT * FROM vehicle", (err, res) => {
+  sql.query("SELECT * FROM vehicle v WHERE v.is_deleted = 0", (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)

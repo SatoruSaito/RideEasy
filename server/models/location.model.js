@@ -26,7 +26,7 @@ Location.create = (newLocation, result) => {
 };
 
 Location.getAll = result => {
-    sql.query("SELECT * FROM location", (err, res) => {
+    sql.query("SELECT * FROM location l WHERE l.is_deleted = 0", (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
