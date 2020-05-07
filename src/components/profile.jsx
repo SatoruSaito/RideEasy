@@ -179,6 +179,7 @@ const Profile = (props) => {
     })
   }
 
+
   const extendMembership = async () => {
     const {end_date, start_date, status} = membershipInfo;
     const userId = sessionStorage.getItem("userId");
@@ -290,6 +291,23 @@ const Profile = (props) => {
     store.addNotification({
       title: "Return Vehicle",
       message: "Thanks  for return up the vehicle",
+      showIcon: true,
+      type: "success",
+      insert: "bottom",
+      container: "bottom-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    })
+  }
+
+  const submitFeedback = ()  => {
+    store.addNotification({
+      title: "Feedabck",
+      message: "Thank you for providing feedback",
       showIcon: true,
       type: "success",
       insert: "bottom",
@@ -426,7 +444,7 @@ const Profile = (props) => {
           }
         </MDBCardBody>
             {!isEmpty(returnVehicleInfo) &&
-            <MDBCard className="col-md-offset-2">
+            <MDBCard className="col-md">
               <label className="col-sm-4 col-form-label">Return vehicle Info</label>
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label"> Total Charges</label>
@@ -461,6 +479,17 @@ const Profile = (props) => {
                   />
                 </div>
               </div>
+
+              <div class="form-group">
+                <label for="feedback"> Provide your feedback/concerns</label>
+                <textarea class="form-control rounded-0" id="feedback" rows="3">
+                </textarea>
+                <MDBBtn color="cyan" type="submit" onClick= {submitFeedback}>
+                  Submit Feedabck
+                </MDBBtn>
+              </div>
+
+
             </MDBCard> }
           </MDBCard>
 
