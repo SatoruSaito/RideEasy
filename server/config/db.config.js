@@ -1,6 +1,6 @@
 module.exports = {
-    HOST: "localhost",
+    HOST: "rental-car-system2.cgwhuit4pcfe.us-west-2.rds.amazonaws.com",
     USER: "root",
-    PASSWORD: "abcd",
+    PASSWORD: "secret11",
     DB: "rental_car_system_1"
   };
