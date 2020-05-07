@@ -42,6 +42,7 @@ import Typography from "@material-ui/core/Typography"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {formatDatetoLocal} from '../utils/common'
 import isEmpty from "lodash/isEmpty";
+import "../css/vehicles.css";
 
 const Profile = (props) => {
   const [userInfo, setUserInfo] = useState({})
@@ -52,9 +53,11 @@ const Profile = (props) => {
   const [returnVehicleInfo,setReturnVehicleInfo] = useState([])
 
   const userId = sessionStorage.getItem("userId")
+  const userName = sessionStorage.getItem("userName")
   const userStatus = membershipInfo && membershipInfo.status
   const isMembershipShow = userStatus === "ACTIVE"
   const isReservationShow = userStatus === "ACTIVE"
+  console.log("props",props);
 
   useEffect(() => {
     onLoad()
@@ -147,7 +150,7 @@ const Profile = (props) => {
   }
 
   const updateMembership = async (status) => {
-    const StatusText = status ==='ACTIVE' ? 'Activate Membership' : 'Cancel Membership'
+    const StatusText = status ==='ACTIVE' ? 'Activate Membership' : 'Cancelled Membership'
     const { start_date, end_date } = membershipInfo;
     const userId = sessionStorage.getItem("userId")
 
@@ -159,6 +162,7 @@ const Profile = (props) => {
       },
     }
     const res = await fetch(APIS.userStatus(userId), options)
+    getMembershipInfo()
     store.addNotification({
       title: StatusText,
       message: `${StatusText} successfully !`,
@@ -186,6 +190,7 @@ const Profile = (props) => {
       }
     }
     const res = await fetch(APIS.userStatus(userId), options);
+    getMembershipInfo()
     store.addNotification({
       title: "Extend Membership",
       message:'Membership has been extend to next 6 months successfully ! ',
@@ -308,11 +313,11 @@ const Profile = (props) => {
         <Typography>Membership</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        {membershipInfo.status === "ACTIVE" ? (
+        {membershipInfo.status === "ACTIVE"  &&  membershipInfo.status !== "INACTIVE" ? (
           <Typography>
             Your membership is valid till{" "}
             {membershipInfo.end_date &&
-            formatDatetoLocal(membershipInfo.end_date)} &nbsp;
+            formatDatetoLocal(membershipInfo.end_date)}.
             You can cancel and extend Membership anytime.
             <p>
               <MDBBtn
@@ -477,6 +482,9 @@ const Profile = (props) => {
           </MDBNavbarBrand>
           <MDBCollapse navbar>
             <MDBNavbarNav right>
+              <MDBNavItem>
+               <h6 class="user-name">Hi {userName}</h6>
+              </MDBNavItem>
               <MDBNavItem>
                 <MDBBtn
                   size="sm"

@@ -37,6 +37,7 @@ const Vehicles = () => {
   const [locations, setLocations] = useState([])
   const [startDate, setStartDate] = useState([''])
   const [endDate, setEndDate] = useState([''])
+  const userName = sessionStorage.getItem("userName")
 
   useEffect(() => {
     onLoad()
@@ -101,6 +102,9 @@ const Vehicles = () => {
           </MDBNavbarBrand>
           <MDBCollapse navbar>
             <MDBNavbarNav right>
+              <MDBNavItem>
+                <h6 class="user-name">Hi {userName}</h6>
+              </MDBNavItem>
               <MDBNavItem>
                 <MDBBtn
                   size="sm"

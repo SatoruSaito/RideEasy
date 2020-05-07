@@ -30,6 +30,7 @@ const VehicleDetails = (props) => {
   const startDate = props.location.state.startDate;
   const endDate = props.location.state.endDate;
   const vehicleId = props.match.params.id
+  const userName = sessionStorage.getItem("userName")
 
   useEffect(() => {
     onLoad()
@@ -118,6 +119,9 @@ const VehicleDetails = (props) => {
           </MDBNavbarBrand>
           <MDBCollapse navbar>
             <MDBNavbarNav right>
+              <MDBNavItem>
+                <h6 class="user-name">Hi {userName}</h6>
+              </MDBNavItem>
               <MDBNavItem >
                 <MDBBtn color="indigo" href={"/user/profile"} mdbWavesEffect>
                   Profile
