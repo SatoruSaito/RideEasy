@@ -1,3 +1,24 @@
+# The Targaryens - RideEasy Car Rental Project
+
+* Project Diagrams
+
+# [Use Case Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/UseCase.png)
+
+![Use Case Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/UseCase.png)
+
+
+# [Architecture Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Architecture.png)
+
+![Architecture Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Architecture.png)
+
+
+# [Deployment Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Deployment.png)
+
+![Deployment Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Deployment.png)
+
+
+
+
 ## Using this project
 
 Clone the project, change into the directory and install the dependencies.

@@ -214,7 +214,7 @@ reservation.calculateCharges = (vehicle_uuid, start_date, end_date,reservation_c
 
     // var duration = moment.duration(req.body.end_date.diff(req.body.start_date));
     let totalHours = moment.duration(diff_ms).asHours();
-    let find_price_query = `SELECT price, late_fee from vehicle_price_range vpr where vpr.min_hours <= ${totalHours} and vpr.max_hours >= ${totalHours} and vpr.vehicle_type_uuid = \'${vehicleDetails.vehicle_type_uuid}\'`;
+    let find_price_query = `SELECT price, late_fee from vehicle_price_range vpr where vpr.min_hours <= ${totalHours} and vpr.max_hours > ${totalHours} and vpr.vehicle_type_uuid = \'${vehicleDetails.vehicle_type_uuid}\'`;
     sql.query(find_price_query, (err, res) => {
       if (err) {
         console.log("error: ", err);
