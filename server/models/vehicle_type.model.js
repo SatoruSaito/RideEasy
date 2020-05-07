@@ -62,7 +62,7 @@ VehicleType.getPriceRangeByVehicleType = (vehicleTypeUuid, result) => {
     let diff_ms = moment(end_date).diff(moment(start_date));
     let totalHours = moment.duration(diff_ms).asHours();
     console.log("totalhours = " + totalHours);
-    var qrystring = `SELECT price from vehicle_price_range vpr where vpr.min_hours <= ${totalHours} and vpr.max_hours >= ${totalHours} and vpr.vehicle_type_uuid = \'${vehicle_type_uuid}\';`;
+    var qrystring = `SELECT price from vehicle_price_range vpr where vpr.min_hours <= ${totalHours} and vpr.max_hours > ${totalHours} and vpr.vehicle_type_uuid = \'${vehicle_type_uuid}\';`;
     console.log("qrystring" + qrystring)
       sql.query(qrystring, (err, res) => {
         if (err) {
