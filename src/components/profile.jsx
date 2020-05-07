@@ -147,7 +147,7 @@ const Profile = (props) => {
   }
 
   const updateMembership = async (status) => {
-    const StatusText = status ==='ACTIVE' ? 'Cancel Membership' : 'Activate Membership'
+    const StatusText = status ==='ACTIVE' ? 'Activate Membership' : 'Cancel Membership'
     const { start_date, end_date } = membershipInfo;
     const userId = sessionStorage.getItem("userId")
 
