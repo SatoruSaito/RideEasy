@@ -23,15 +23,13 @@
 
 
 
-* MVC Design Pattern
-
-
 # [Technology Stack](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/TechStack.png)
 
 
 ![Deployment Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/TechStack.png)
 
 
+* MVC Design Pattern
 
 The ReactJS Framework acts as our View. In NodeJS we configure routes to send requests to the appropriate controller which then does request validation and uses the model to fetch data from the database. The data model i.e. RDS in this application is UI agnostic. In this way, we are able to separate the View from the Model. Users of the application will be served consistent data from the model simultaneously at different contexts.
 
