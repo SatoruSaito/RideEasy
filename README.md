@@ -3,30 +3,30 @@
 * Project Diagrams
 
 
-# [Use Case Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/UseCase.png)
+# [Use Case Diagram](https://github.com/indy1501/RideEasy/blob/master/Diagrams/UseCase.png)
 
-![Use Case Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/UseCase.png)
-
-
-
-
-# [Architecture Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Architecture.png)
-
-![Architecture Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Architecture.png)
+![Use Case Diagram](https://github.com/indy1501/RideEasy/blob/master/Diagrams/UseCase.png)
 
 
 
 
-# [Deployment Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Deployment.png)
+# [Architecture Diagram](https://github.com/indy1501/RideEasy/blob/master/Diagrams/Architecture.png)
 
-![Deployment Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/Deployment.png)
-
-
-
-# [Technology Stack](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/TechStack.png)
+![Architecture Diagram](https://github.com/indy1501/RideEasy/blob/master/Diagrams/Architecture.png)
 
 
-![Deployment Diagram](https://github.com/gopinathsjsu/sp20-cmpe-202-sec-49-team-project-the-targaryens/blob/master/Diagrams/TechStack.png)
+
+
+# [Deployment Diagram](https://github.com/indy1501/RideEasy/blob/master/Diagrams/Deployment.png)
+
+![Deployment Diagram](https://github.com/indy1501/RideEasy/blob/master/Diagrams/Deployment.png)
+
+
+
+# [Technology Stack](https://github.com/indy1501/RideEasy/blob/master/Diagrams/TechStack.png)
+
+
+![Deployment Diagram](https://github.com/indy1501/RideEasy/blob/master/Diagrams/TechStack.png)
 
 
 * MVC Design Pattern
